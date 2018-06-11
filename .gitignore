@@ -1,0 +1,5 @@
+# File to be ignore
+
+dp1_web_*.pdf
+istruzioni_php*.pdf
+.DS_Store
