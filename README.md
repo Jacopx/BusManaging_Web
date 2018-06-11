@@ -53,7 +53,10 @@ EE → FF: total 0: empty FF → KK: total 4: user u1 (4 passengers)
 10. The more uniform the views and the layouts are by varying the adopted browser, the better.
 
 ### Built With
-* [C](https://en.wikipedia.org/wiki/C_(programming_language)) - The development language
+* [HTML](https://www.w3schools.com/Html/) - Web standard
+* [CSS](https://www.w3schools.com/Css/) - Stylesheet language
+* [JavaScript](https://www.javascript.com/) - Scripting language for web
+* [PHP](http://www.php.net/) - Server side for web programming
 
 ### Authors
 * **Jacopo Nasi** - [Jacopx](https://github.com/Jacopx)
