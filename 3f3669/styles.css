@@ -30,6 +30,8 @@ body {
 
 .logged {
     visibility: hidden;
+    text-align: right;
+    align-items: center;
     padding: 0px 30px;
 }
 
