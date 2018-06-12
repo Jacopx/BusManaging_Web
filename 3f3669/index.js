@@ -7,11 +7,11 @@ function checkCookie() {
     var cookieHash = getCookie("polixbus_hash");
 
     if (cookieUser != "" && cookieHash != "") {
-        alert("Cookie SET");
+        // alert("Cookie SET");
         verifyCookie(cookieUser, cookieHash)
         //showLogged()
     } else {
-        alert("Cookie NOT SET");
+        // alert("Cookie NOT SET");
         //showLogin()
     }
 }
@@ -48,4 +48,21 @@ function verifyCookie(user, hash) {
             console.log(returnedData);
             document.getElementById("logged").innerHTML = returnedData;
         });
+}
+
+function login() {
+    var user = document.getElementById("user").value;
+    var pass = document.getElementById("pass").value;
+
+    $.post('login.php', { field1: user, field2 : pass},
+        function(returnedData){
+            console.log(returnedData);
+            location.reload();
+        });
+}
+
+function logout() {
+    document.cookie = "polixbus_user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "polixbus_hash=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    location.reload();
 }

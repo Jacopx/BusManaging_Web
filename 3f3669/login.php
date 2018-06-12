@@ -3,9 +3,10 @@
     // *        Distributed Programming - WebProgramming == Jacopo Nasi          *
     // *      Repo avail: https://github.com/Jacopx/BusManaging_WebPlatform      *
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    include 'base.php';
 
-    if(isset($_POST['user']) && isset($_POST['pass'])) {
-        login($_POST['user'], $_POST['pass']);
+    if(isset($_POST['field1']) && isset($_POST['field2'])) {
+        login($_POST['field1'], $_POST['field2']);
     }
 
     function login($user, $pass) {
@@ -37,14 +38,12 @@
                     $cookie_value = $row["pass"];
                     setcookie($cookie_name, $cookie_value, time() + (5*60), '/');
 
-//                    header("index.html");
-
                 } else {
-                    echo 'Invalid password.<br><br>';
+                    echo 'Invalid password';
                 }
 
             }
         } else {
-            echo "0 results";
+            echo "USER NOT FOUND";
         }
     }
