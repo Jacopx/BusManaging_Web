@@ -1,18 +1,11 @@
-<!--* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-<!--*        Distributed Programming - WebProgramming == Jacopo Nasi          *-->
-<!--*      Repo avail: https://github.com/Jacopx/BusManaging_WebPlatform      *-->
-<!--* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-
 <?php
-    define("BUS_SIZE", "4");
-    define("SQL_HOST", "mysql");
-    define("SQL_USER", "dev");
-    define("SQL_PASS", "dev");
-    define("SQL_DB", "database");
+    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    // *        Distributed Programming - WebProgramming == Jacopo Nasi          *
+    // *      Repo avail: https://github.com/Jacopx/BusManaging_WebPlatform      *
+    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-
-    if(isset($_GET['user']) && isset($_GET['pass'])) {
-        login($_GET['user'], $_GET['pass']);
+    if(isset($_POST['user']) && isset($_POST['pass'])) {
+        login($_POST['user'], $_POST['pass']);
     }
 
     function login($user, $pass) {
@@ -36,9 +29,16 @@
                 if (password_verify($pass, $row["pass"])) {
                     echo 'Password is valid!<br><br>Welcome ' . $user . ' <br>';
 
-                    $cookie_name = 'polixbus';
-                    $cookie_value = 'random_value';
-                    setcookie($cookie_name, $cookie_value, time() + (86400 * 30), '/'); // 86400 = 1 day
+                    $cookie_name = 'polixbus_user';
+                    $cookie_value = $user;
+                    setcookie($cookie_name, $cookie_value, time() + (5*60), '/');
+
+                    $cookie_name = 'polixbus_hash';
+                    $cookie_value = $row["pass"];
+                    setcookie($cookie_name, $cookie_value, time() + (5*60), '/');
+
+//                    header("index.html");
+
                 } else {
                     echo 'Invalid password.<br><br>';
                 }
@@ -48,4 +48,3 @@
             echo "0 results";
         }
     }
-?>

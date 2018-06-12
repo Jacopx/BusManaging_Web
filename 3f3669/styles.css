@@ -1,8 +1,7 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *        Distributed Programming - WebProgramming == Jacopo Nasi          *
- *      Repo avail: https://github.com/Jacopx/BusManaging_WebPlatform      *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
+/** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
+/**        Distributed Programming - WebProgramming == Jacopo Nasi          **/
+/**      Repo avail: https://github.com/Jacopx/BusManaging_WebPlatform      **/
+/** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 body {
     font-family: Helvetica;
     color: white;
@@ -30,6 +29,12 @@ body {
     padding: 0px 30px;
     align-items: center;
     display: flex;
+    /*visibility: hidden;*/
+}
+
+.logged {
+    /*visibility: hidden;*/
+    padding: 0px 30px;
 }
 
 .navbar {

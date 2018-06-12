@@ -16,15 +16,15 @@
     <meta name="Jacopx" content="WebProgramming_DP1">
 
     <script type="text/javascript" src="index.js"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 
-<body onload="checkCookie()">
+<body onload="checkCookie();">
 
   <div class="header">
       <h1 class="title">POLIXbus</h1>
       <div class="login">
-          <form method="get" action="index.php">
+          <form method="post" action="login.php">
               <table>
               <tr>
                   <td>E-mail</td>
@@ -38,6 +38,7 @@
               </table>
           </form>
       </div>
+      <div class="logged" id="logged"></div>
   </div>
 
   <div class="navbar">
@@ -46,7 +47,7 @@
       <a href="#clients">Logout</a>
   </div>
 
-  <div class="main">
+  <div class="main" id="main">
       <h4>Website developed by:
           <a href="https://github.com/Jacopx">Jacopx</a>
       </h4>

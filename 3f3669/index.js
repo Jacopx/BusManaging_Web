@@ -1,14 +1,18 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *        Distributed Programming - WebProgramming == Jacopo Nasi          *
- *      Repo avail: https://github.com/Jacopx/BusManaging_WebPlatform      *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+// *        Distributed Programming - WebProgramming == Jacopo Nasi          *
+// *      Repo avail: https://github.com/Jacopx/BusManaging_WebPlatform      *
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 function checkCookie() {
-    var cookie = getCookie("polixbus");
-    if (cookie != "") {
-        alert("Welcome again " + cookie);
+    var cookieUser = getCookie("polixbus_user");
+    var cookieHash = getCookie("polixbus_hash");
+
+    if (cookieUser != "" && cookieHash != "") {
+        alert("Cookie SET");
+        verifyCookie(cookieUser, cookieHash)
+        //showLogged()
     } else {
-        alert("Coockie NOT SET");
+        alert("Cookie NOT SET");
+        //showLogin()
     }
 }
 
@@ -26,4 +30,22 @@ function getCookie(cname) {
         }
     }
     return "";
+}
+
+function showLogin() {
+    document.getElementById("login").style.visibility = 'visible';     // Show
+    document.getElementById("logged").style.visibility = 'hidden';      // Hide
+}
+
+function showLogged() {
+    document.getElementById("logged").style.visibility = 'visible';     // Show
+    document.getElementById("login").style.visibility = 'collapse';      // Hide
+}
+
+function verifyCookie(user, hash) {
+    $.post('checkUser.php', { field1: user, field2 : hash},
+        function(returnedData){
+            console.log(returnedData);
+            document.getElementById("logged").innerHTML = returnedData;
+        });
 }
