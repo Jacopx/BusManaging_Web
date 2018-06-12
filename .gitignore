@@ -4,3 +4,7 @@ dp1_web_*.pdf
 istruzioni_php*.pdf
 .DS_Store
 .idea
+docker-compose.yml
+docker/
+etc/
+Dockerfile.development
