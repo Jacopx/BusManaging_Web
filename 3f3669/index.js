@@ -1,18 +1,11 @@
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-// *        Distributed Programming - WebProgramming == Jacopo Nasi          *
-// *      Repo avail: https://github.com/Jacopx/BusManaging_WebPlatform      *
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 function checkCookie() {
     var cookieUser = getCookie("polixbus_user");
     var cookieHash = getCookie("polixbus_hash");
 
     if (cookieUser != "" && cookieHash != "") {
-        // alert("Cookie SET");
         verifyCookie(cookieUser, cookieHash)
-        //showLogged()
     } else {
-        // alert("Cookie NOT SET");
-        //showLogin()
+        showLogin();
     }
 }
 
@@ -45,8 +38,12 @@ function showLogged() {
 function verifyCookie(user, hash) {
     $.post('checkUser.php', { field1: user, field2 : hash},
         function(returnedData){
-            console.log(returnedData);
-            document.getElementById("logged").innerHTML = returnedData;
+            if(JSON.parse(returnedData).t == 1) {
+                document.getElementById("logged").innerHTML = JSON.parse(returnedData).d;
+                showLogged();
+            } else {
+                logout();
+            }
         });
 }
 

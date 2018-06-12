@@ -1,8 +1,4 @@
 <?php
-    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-    // *        Distributed Programming - WebProgramming == Jacopo Nasi          *
-    // *      Repo avail: https://github.com/Jacopx/BusManaging_WebPlatform      *
-    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
     include 'base.php';
 
     if(isset($_POST['field1']) && isset($_POST['field2'])) {

@@ -1,8 +1,3 @@
-<!--* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-<!--*        Distributed Programming - WebProgramming == Jacopo Nasi          *-->
-<!--*      Repo avail: https://github.com/Jacopx/BusManaging_WebPlatform      *-->
-<!--* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-
 <?php
 define("BUS_SIZE", "4");
 define("SQL_HOST", "mysql");
