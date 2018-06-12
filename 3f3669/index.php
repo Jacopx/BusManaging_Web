@@ -35,6 +35,10 @@
 
                 if (password_verify($pass, $row["pass"])) {
                     echo 'Password is valid!<br><br>Welcome ' . $user . ' <br>';
+
+                    $cookie_name = 'polixbus';
+                    $cookie_value = 'random_value';
+                    setcookie($cookie_name, $cookie_value, time() + (86400 * 30), '/'); // 86400 = 1 day
                 } else {
                     echo 'Invalid password.<br><br>';
                 }
