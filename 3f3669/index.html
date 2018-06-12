@@ -1,15 +1,18 @@
+<!--
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *        Distributed Programming - WebProgramming == Jacopo Nasi          *
+ *      Repo avail: https://github.com/Jacopx/BusManaging_WebPlatform      *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+/-->
+
 <!DOCTYPE html>
 <html lang="it">
-
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" href="styles.css">
-  <!-- <script type="text/javascript">
-    alert("Page loading...")
-  </script> -->
 
-  <title>Test Page</title>
-  <meta name="Here some description" content="Trying Stuffs">
+  <title>POLIXbus</title>
+  <meta name="POLIXbus" content="Wesite for POLIXbus">
   <meta name="Jacopx" content="LabForDP1">
 
 </head>
@@ -17,19 +20,34 @@
 <body>
 
   <div class="header">
-    <h1>Test Page</h1>
+      <h1 class="title">POLIXbus</h1>
+      <div class="login">
+          <table>
+          <tr>
+              <td>E-mail</td>
+              <td>Password</td>
+          </tr>
+          <tr>
+              <td><input class="inputtext" name="email" id="email" type="email"></td>
+              <td><input class="inputtext" name="pass" id="pass" type="password"></td>
+              <td><input value="Accedi" type="submit"></td>
+          </tr>
+          </table>
+      </div>
   </div>
-  <div class="info">
-    <h4>Website developed by
-      <a href="https://github.com/Jacopx">Jacopx</a>
-    </h4>
-  </div>
-  <div class="footer">
 
+  <div class="navbar">
+      <a href="#about">Bus stops</a>
+      <a href="#services">Reservation</a>
+      <a href="#clients">Logout</a>
   </div>
-  <!-- <script type="text/javascript">
-    setTimeout(function () { alert("Page loaded!") }, 2000);
-  </script> -->
+
+  <div class="main">
+      <h4>Website developed by:
+          <a href="https://github.com/Jacopx">Jacopx</a>
+      </h4>
+  </div>
+
   <noscript>
     Sorry: Your browser does not support or has disabled JavaScript.
   </noscript>
