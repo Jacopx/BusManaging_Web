@@ -6,6 +6,7 @@ if(isset($_POST['field1']) && isset($_POST['field2'])) {
 }
 
 function signup($user, $pass) {
+    $type = -3; $data = -3;
     $conn = mysqli_connect(SQL_HOST, SQL_USER, SQL_PASS);
 
     if (mysqli_connect_errno()) {
@@ -16,30 +17,28 @@ function signup($user, $pass) {
         die("Internal error: selection of DB failed");
     }
 
-//    $sql = "SELECT * FROM Users WHERE user='$user'";
+    $sql = "SELECT * FROM Users WHERE user='$user'";
     $result = mysqli_query($conn, $sql);
 
     if (mysqli_num_rows($result) > 0) {
         // output data of each row
         while($row = mysqli_fetch_assoc($result)) {
-
-            if (password_verify($pass, $row["pass"])) {
-                echo 'Password is valid!<br><br>Welcome ' . $user . ' <br>';
-
-                $cookie_name = 'polixbus_user';
-                $cookie_value = $user;
-                setcookie($cookie_name, $cookie_value, time() + (5*60), '/');
-
-                $cookie_name = 'polixbus_hash';
-                $cookie_value = $row["pass"];
-                setcookie($cookie_name, $cookie_value, time() + (5*60), '/');
-
-            } else {
-                echo 'Invalid password';
-            }
-
+            $type = -1;
+            $data = 0;
+            break;
         }
     } else {
-        echo "USER NOT FOUND";
+        $hash = password_hash($pass, PASSWORD_DEFAULT);
+        $sql = "INSERT INTO Users VALUES ('$user','$hash')";
+
+        if (mysqli_query($conn, $sql)) {
+            $type = 1;
+            $data = 0;
+        } else {
+            $type = -2;
+            $data = "Error: " . $sql . "<br>" . mysqli_error($conn);
+        }
     }
+
+    echo json_encode(array("t" => $type, "d" => $data));
 }

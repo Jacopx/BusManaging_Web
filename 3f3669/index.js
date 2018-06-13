@@ -77,13 +77,21 @@ function signup() {
 
     if(rU == 1 && rP == 1) {
 
-        var pass = document.getElementById("signup_pass");
-        var user = document.getElementById("signup_user");
+        var pass = document.getElementById("signup_pass").value;
+        var user = document.getElementById("signup_user").value;
 
-        $.post('signup.php', { field1: user, field2 : pass},
-            function(returnedData){
-                console.log(returnedData);
-                location.reload();
+        $.post('signup.php', {field1: user, field2: pass},
+            function (returnedData) {
+                if (JSON.parse(returnedData).t == 1) {
+                    alert("Login successful");
+                    location.reload();
+                } else if (JSON.parse(returnedData).t == -1) {
+                    alert("User already registered");
+                    location.reload();
+                } else if (JSON.parse(returnedData).t == -2) {
+                    alert("Database error");
+                    location.reload();
+                }
             });
     }
 }
