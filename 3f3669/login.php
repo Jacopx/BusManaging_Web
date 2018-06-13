@@ -6,6 +6,7 @@
     }
 
     function login($user, $pass) {
+        $type = -3; $data = -3;
         $conn = mysqli_connect(SQL_HOST, SQL_USER, SQL_PASS);
 
         if (mysqli_connect_errno()) {
@@ -24,7 +25,9 @@
             while($row = mysqli_fetch_assoc($result)) {
 
                 if (password_verify($pass, $row["pass"])) {
-                    echo 'Password is valid!<br><br>Welcome ' . $user . ' <br>';
+                    // SUCCESS
+                    $type = 1;
+                    $data = 'Password is valid!<br><br>Welcome ' . $user . ' <br>';
 
                     $cookie_name = 'polixbus_user';
                     $cookie_value = $user;
@@ -34,12 +37,21 @@
                     $cookie_value = $row["pass"];
                     setcookie($cookie_name, $cookie_value, time() + (5*60), '/');
 
+                    break;
+
                 } else {
-                    echo 'Invalid password';
+                    // FAIL - WRONG PASSWORD
+                    $type = -1;
+                    $data = 0;
+                    break;
                 }
 
             }
         } else {
-            echo "USER NOT FOUND";
+            // FAIL - USER NOT FOUND
+            $type = -2;
+            $data = 0;
         }
+
+        echo json_encode(array("t" => $type, "d" => $data));
     }

@@ -53,8 +53,15 @@ function login() {
 
     $.post('login.php', { field1: user, field2 : pass},
         function(returnedData){
-            console.log(returnedData);
-            location.reload();
+            if (JSON.parse(returnedData).t == 1) {
+                location.reload();
+            } else if (JSON.parse(returnedData).t == -1) {
+                alert("Wrong password");
+                location.reload();
+            } else if (JSON.parse(returnedData).t == -2) {
+                alert("User not found");
+                location.reload();
+            }
         });
 }
 

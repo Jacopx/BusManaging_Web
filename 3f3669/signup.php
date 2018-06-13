@@ -23,6 +23,7 @@ function signup($user, $pass) {
     if (mysqli_num_rows($result) > 0) {
         // output data of each row
         while($row = mysqli_fetch_assoc($result)) {
+            // FAIL
             $type = -1;
             $data = 0;
             break;
@@ -32,9 +33,11 @@ function signup($user, $pass) {
         $sql = "INSERT INTO Users VALUES ('$user','$hash')";
 
         if (mysqli_query($conn, $sql)) {
+            // SUCCESS
             $type = 1;
             $data = 0;
         } else {
+            // FAIL
             $type = -2;
             $data = "Error: " . $sql . "<br>" . mysqli_error($conn);
         }
