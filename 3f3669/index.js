@@ -48,7 +48,7 @@ function verifyCookie(user, hash) {
 }
 
 function login() {
-    var user = document.getElementById("user").value;
+    var user = document.getElementById("user").value.toLowerCase();
     var pass = document.getElementById("pass").value;
 
     $.post('login.php', { field1: user, field2 : pass},
@@ -85,7 +85,7 @@ function signup() {
     if(rU == 1 && rP == 1) {
 
         var pass = document.getElementById("signup_pass").value;
-        var user = document.getElementById("signup_user").value;
+        var user = document.getElementById("signup_user").value.toLowerCase();
 
         $.post('signup.php', {field1: user, field2: pass},
             function (returnedData) {
@@ -137,7 +137,7 @@ function validateUser() {
 
     var returnValue = -1;
 
-    if(regexMail.test(user.value)) {
+    if(regexMail.test(user.value.toLowerCase())) {
         user.style.border = ""
         returnValue = 1;
     } else {
