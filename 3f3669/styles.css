@@ -1,7 +1,7 @@
 body {
     font-family: Helvetica;
     color: white;
-    background-color: white;
+    background-color: gainsboro;
 }
 
 .header {
@@ -11,7 +11,7 @@ body {
     height: 60px;
     width: 100%;
     background-color: #33CC99;
-    color: black;
+    color: gainsboro;
     text-align: left;
     padding: 0px 10px;
     align-items: center;
@@ -51,7 +51,8 @@ body {
     padding: 6px 8px 6px 16px;
     text-decoration: none;
     font-size: 25px;
-    color: #818181;
+    /*color: #818181;*/
+    color: white;
     display: block;
 }
 
