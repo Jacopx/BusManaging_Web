@@ -1,3 +1,5 @@
+var logged = -1; // -1 standard value | 0 not logged | 1 logged
+
 function checkCookie() {
     var cookieUser = getCookie("polixbus_user");
     var cookieHash = getCookie("polixbus_hash");
@@ -41,8 +43,10 @@ function verifyCookie(user, hash) {
             if(JSON.parse(returnedData).t == 1) {
                 document.getElementById("logged").innerHTML = JSON.parse(returnedData).d;
                 showLogged();
+                logged = 1;
             } else {
                 logout();
+                logged = 0;
             }
         });
 }
@@ -75,6 +79,7 @@ function showSignup() {
 function logout() {
     document.cookie = "polixbus_user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "polixbus_hash=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    logged = 0;
     location.reload();
 }
 
@@ -146,4 +151,18 @@ function validateUser() {
     }
 
     return returnValue;
+}
+
+function showReservation() {
+
+    $.post('getReservation.php', { field1: logged},
+        function(returnedData){
+            console.log(returnedData);
+            if (JSON.parse(returnedData).t == 0) {
+                console.log(JSON.parse(returnedData).d);
+                alert(JSON.parse(returnedData).d);
+            } else if (JSON.parse(returnedData).t == 1) {
+                document.getElementById("reservation-table").innerText = JSON.parse(returnedData).d;
+            }
+        });
 }

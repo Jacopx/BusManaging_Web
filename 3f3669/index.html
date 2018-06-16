@@ -38,10 +38,10 @@
   </div>
 
   <div class="navbar">
-      <a href="#about">Bus stops</a>
+      <a onclick="showReservation();">Bus stops</a>
       <!--<a href="#services">Reservation</a>-->
-      <a href="#" onclick="showSignup();">Sign Up</a>
-      <a href="#" onclick="logout();">Logout</a>
+      <a onclick="showSignup();">Sign Up</a>
+      <a onclick="logout();">Logout</a>
   </div>
 
   <div class="main" id="main">
@@ -65,6 +65,9 @@
                   </div>
               </div>
           </div>
+      </div>
+      <div class="reservation">
+          <table id="reservation-table"></table>
       </div>
 
       <!--<h4>Website developed by:-->
