@@ -92,6 +92,7 @@ function login() {
 function showSignup() {
     document.getElementById("login").style.visibility = 'collapse';      // Hide
     document.getElementById("logged").style.visibility = 'hidden';      // Hide
+    document.getElementById("reservation-table").style.visibility = 'collapse';      // Hide
 
     document.getElementById("signup_form").style.visibility = 'visible';
 }
@@ -189,6 +190,32 @@ function showReservation() {
                 document.getElementById("signup_form").style.visibility = 'collapse';
                 document.getElementById("reservation-table").innerHTML = JSON.parse(returnedData).d;
                 document.getElementById("reservation-table").style.visibility = 'visible';
+            }
+        });
+
+    if (userLogged != "") {
+        document.getElementById("delete-reser").style.visibility = 'visible';
+    } else {
+        document.getElementById("delete-reser").style.visibility = 'collapse';
+    }
+}
+
+function deleteReservation() {
+
+    updateCookie();
+    document.getElementById("reservation-table").innerHTML = "";
+    document.getElementById("reservation-table").style.visibility = 'visible';
+
+    var userLogged = getCookie("polixbus_user");
+
+    $.post('deleteReservation.php', { field1: userLogged},
+        function(returnedData){
+            console.log(returnedData);
+            if (JSON.parse(returnedData).t == 0) {
+                console.log(JSON.parse(returnedData).d);
+                alert(JSON.parse(returnedData).d);
+            } else if (JSON.parse(returnedData).t == 1) {
+                showReservation();
             }
         });
 }

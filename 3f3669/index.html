@@ -12,7 +12,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 
-<body onload="checkCookie();">
+<body onload="checkCookie(); showReservation();">
 
   <div class="header">
       <div class="leftHeader">
@@ -47,8 +47,11 @@
   </div>
 
   <div class="main" id="main">
-      <div class="reservation-table" id="reservation-table">
+      <div>
+          <div class="reservation-table" id="reservation-table">
 
+          </div>
+          <button type="submit" onclick="deleteReservation();" id="delete-reser">Delete Reservation</button>
       </div>
       <div id="signup_form" class="signup_form">
           <div class="modal-content">
