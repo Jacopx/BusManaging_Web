@@ -154,7 +154,6 @@ function validateUser() {
 }
 
 function showReservation() {
-
     $.post('getReservation.php', { field1: logged},
         function(returnedData){
             console.log(returnedData);
@@ -162,7 +161,8 @@ function showReservation() {
                 console.log(JSON.parse(returnedData).d);
                 alert(JSON.parse(returnedData).d);
             } else if (JSON.parse(returnedData).t == 1) {
-                document.getElementById("reservation-table").innerText = JSON.parse(returnedData).d;
+                document.getElementById("signup_form").style.visibility = 'collapse';
+                document.getElementById("reservation-table").innerHTML = JSON.parse(returnedData).d;
             }
         });
 }
