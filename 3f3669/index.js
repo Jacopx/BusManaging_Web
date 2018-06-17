@@ -1,4 +1,4 @@
-var logged = -1; // -1 standard value | 0 not logged | "username" logged
+// var logged = -1; // -1 standard value | 0 not logged | "username" logged
 
 function checkCookie() {
     var cookieUser = getCookie("polixbus_user");
@@ -6,7 +6,6 @@ function checkCookie() {
 
     if (cookieUser != "" && cookieHash != "") {
         verifyCookie(cookieUser, cookieHash);
-        logged = cookieUser;
     } else {
         showLogin();
     }
@@ -42,7 +41,7 @@ function updateCookie() {
         document.cookie = "polixbus_user=" + cookieUser + ";" + expires + ";path=/";
         document.cookie = "polixbus_hash=" + cookieHash + ";" + expires + ";path=/";
     } else {
-        location.reload();
+        // location.reload();
         showLogin();
     }
 
@@ -64,11 +63,9 @@ function verifyCookie(user, hash) {
             if(JSON.parse(returnedData).t == 1) {
                 document.getElementById("logged").innerHTML = JSON.parse(returnedData).d;
                 showLogged();
-                logged = 1;
                 showReservation();
             } else {
                 logout();
-                logged = 0;
                 showReservation();
             }
         });
@@ -102,7 +99,6 @@ function showSignup() {
 function logout() {
     document.cookie = "polixbus_user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "polixbus_hash=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    logged = 0;
     location.reload();
 }
 
@@ -182,12 +178,7 @@ function showReservation() {
     document.getElementById("reservation-table").style.visibility = 'visible';
 
     var userLogged = getCookie("polixbus_user");
-    if (userLogged == "") {
-        userLogged = "////";
-    }
 
-    // @TODO showing correct reservation for logged and not logged
-    // @TODO improving table visualization
     $.post('getReservation.php', { field1: userLogged},
         function(returnedData){
             console.log(returnedData);

@@ -6,7 +6,7 @@ if(isset($_POST['field1'])) {
 }
 
 function getReservation($logged) {
-    $type = -1; $data = -1;
+    $type = -1;
     $conn = mysqli_connect(SQL_HOST, SQL_USER, SQL_PASS);
     $stops = array();
 
