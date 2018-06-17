@@ -13,10 +13,14 @@ function getReservation($logged) {
     if (mysqli_connect_errno()) {
         $type = 0;
         $data ="Internal error: connection to DB failed ". mysqli_connect_error();
+        echo json_encode(array("t" => $type, "d" => $data));
+        die();
     }
     if (!mysqli_select_db($conn, SQL_DB)) {
         $type = 0;
         $data = "Internal error: selection of DB failed";
+        echo json_encode(array("t" => $type, "d" => $data));
+        die();
     }
 
     // Getting starting stops
@@ -41,6 +45,7 @@ function getReservation($logged) {
         $type = 0;
         $data = "Impossible getting starting places";
         echo json_encode(array("t" => $type, "d" => $data));
+        die();
     }
 
     // Getting ending stops
@@ -65,6 +70,7 @@ function getReservation($logged) {
         $type = 0;
         $data = "Impossible getting ending places";
         echo json_encode(array("t" => $type, "d" => $data));
+        die();
     }
 
     sort($stops);
@@ -76,6 +82,8 @@ function getReservation($logged) {
 
     $passNumber = array();
     $rowString = array();
+    $startPoint = -1;
+    $endPoint = -1;
 
     // Getting users and preparing all for printing
     $sql = "SELECT * FROM Reservations ORDER BY start, end;";
@@ -88,6 +96,14 @@ function getReservation($logged) {
                 for ($i = 0; $i < (count($stops) - 1); $i++) {
 
                     if ($row["start"] <= $stops[$i] && $row["end"] >=  $stops[($i + 1)]) {
+
+                        if ($row["start"] == $stops[$i] && $logged == $row["user"]) {
+                            $startPoint = $i;
+                        }
+                        if  ($row["end"] == $stops[($i + 1)] && $logged == $row["user"]) {
+                            $endPoint = $i;
+                        }
+
                         if (key_exists($i, $passNumber) && key_exists($i, $rowString)) {
                             $passNumber[$i] += $row["seats"];
                             $rowString[$i] = $rowString[$i] . $row["user"] . " (" . $row["seats"] . " passengers) ";
@@ -105,18 +121,26 @@ function getReservation($logged) {
         $type = 0;
         $data = "Impossible preparing output";
         echo json_encode(array("t" => $type, "d" => $data));
+        die();
     }
 
+
     $data = "<table>";
-    if ($logged == 1) {
+    if ($logged != "") {
         $data = $data . "<tr><th>Track</th><th>Total</th><th>Users</th></tr>";
     } else {
         $data = $data . "<tr><th>Track</th><th>Total</th></tr>";
     }
 
     for ($i = 0; $i < count($segments); $i++) {
-        if ($logged == 1) {
-            $data = $data . "<tr><td>" . $segments[$i] . "</td><td>" . $passNumber[$i] . "</td><td>" . $rowString[$i] . "</td></tr>";
+        if ($logged != "") {
+            if ($startPoint == $i) {
+                $data = $data . "<tr bgcolor=\"#00ff00\"><td>" . $segments[$i] . "</td><td>" . $passNumber[$i] . "</td><td>" . $rowString[$i] . "</td></tr>";
+            } else if ($i == $endPoint) {
+                $data = $data . "<tr bgcolor=\"#ff6666\"><td>" . $segments[$i] . "</td><td>" . $passNumber[$i] . "</td><td>" . $rowString[$i] . "</td></tr>";
+            } else {
+                $data = $data . "<tr><td>" . $segments[$i] . "</td><td>" . $passNumber[$i] . "</td><td>" . $rowString[$i] . "</td></tr>";
+            }
         } else {
             $data = $data . "<tr><td>" . $segments[$i] . "</td><td>" . $passNumber[$i] . "</td></tr>";
         }

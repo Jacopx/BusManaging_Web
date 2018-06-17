@@ -1,4 +1,4 @@
-var logged = -1; // -1 standard value | 0 not logged | 1 logged
+var logged = -1; // -1 standard value | 0 not logged | "username" logged
 
 function checkCookie() {
     var cookieUser = getCookie("polixbus_user");
@@ -6,6 +6,7 @@ function checkCookie() {
 
     if (cookieUser != "" && cookieHash != "") {
         verifyCookie(cookieUser, cookieHash);
+        logged = cookieUser;
     } else {
         showLogin();
     }
@@ -180,9 +181,14 @@ function showReservation() {
     document.getElementById("reservation-table").innerHTML = "";
     document.getElementById("reservation-table").style.visibility = 'visible';
 
+    var userLogged = getCookie("polixbus_user");
+    if (userLogged == "") {
+        userLogged = "////";
+    }
+
     // @TODO showing correct reservation for logged and not logged
     // @TODO improving table visualization
-    $.post('getReservation.php', { field1: logged},
+    $.post('getReservation.php', { field1: userLogged},
         function(returnedData){
             console.log(returnedData);
             if (JSON.parse(returnedData).t == 0) {

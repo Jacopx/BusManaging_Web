@@ -114,7 +114,7 @@ hr {
     padding: 8px;
 }
 
-#reservation-table tr:nth-child(even){background-color: #f2f2f2;}
+/*#reservation-table tr:nth-child(even){background-color: #f2f2f2;}*/
 
 #reservation-table tr:hover {background-color: #ddd;}
 
