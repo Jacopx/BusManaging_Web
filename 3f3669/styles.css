@@ -19,6 +19,10 @@ body {
     justify-content: space-between;
 }
 
+.leftHeader {
+    display: flex;
+}
+
 .login {
     float: right;
     color: black;
