@@ -138,15 +138,15 @@ function validatePass() {
 
 function validateUser() {
     var user = document.getElementById("signup_user");
-    var regexMail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const regexMail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     var returnValue = -1;
 
     if(regexMail.test(user.value.toLowerCase())) {
-        user.style.border = ""
+        user.style.border = "";
         returnValue = 1;
     } else {
-        user.style.border = "2px solid red"
+        user.style.border = "2px solid red";
         returnValue = 0;
     }
 
