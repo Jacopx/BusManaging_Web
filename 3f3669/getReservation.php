@@ -88,9 +88,9 @@ function getReservation($logged) {
                 for ($i = 0; $i < (count($stops) - 1); $i++) {
 
                     if ($row["start"] <= $stops[$i] && $row["end"] >=  $stops[($i + 1)]) {
-                        if (key_exists($i,$passNumber)) {
+                        if (key_exists($i, $passNumber) && key_exists($i, $rowString)) {
                             $passNumber[$i] += $row["seats"];
-                            $rowString[$i] += $row["user"] . " (" . $row["seats"] . " passengers) ";
+                            $rowString[$i] = $rowString[$i] . $row["user"] . " (" . $row["seats"] . " passengers) ";
                         } else {
                             array_push($passNumber, $row["seats"]);
                             array_push($rowString, $row["user"] . " (" . $row["seats"] . " passengers) ");
