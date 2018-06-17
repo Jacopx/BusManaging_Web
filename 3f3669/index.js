@@ -41,6 +41,7 @@ function updateCookie() {
         document.cookie = "polixbus_user=" + cookieUser + ";" + expires + ";path=/";
         document.cookie = "polixbus_hash=" + cookieHash + ";" + expires + ";path=/";
     } else {
+        location.reload();
         showLogin();
     }
 
@@ -176,6 +177,8 @@ function validateUser() {
 function showReservation() {
 
     updateCookie();
+    document.getElementById("reservation-table").innerHTML = "";
+    document.getElementById("reservation-table").style.visibility = 'visible';
 
     // @TODO showing correct reservation for logged and not logged
     // @TODO improving table visualization
