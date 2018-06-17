@@ -5,10 +5,12 @@ function checkCookie() {
     var cookieHash = getCookie("polixbus_hash");
 
     if (cookieUser != "" && cookieHash != "") {
-        verifyCookie(cookieUser, cookieHash)
+        verifyCookie(cookieUser, cookieHash);
     } else {
         showLogin();
     }
+
+    showReservation();
 }
 
 function getCookie(cname) {
@@ -153,6 +155,8 @@ function validateUser() {
 }
 
 function showReservation() {
+    // @TODO showing correct reservation for logged and not logged
+    // @TODO improving table visualization
     $.post('getReservation.php', { field1: logged},
         function(returnedData){
             console.log(returnedData);

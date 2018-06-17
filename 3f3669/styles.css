@@ -25,7 +25,7 @@ body {
     padding: 0px 30px;
     align-items: center;
     display: flex;
-    visibility: visible;
+    visibility: hidden;
 }
 
 .logged {
