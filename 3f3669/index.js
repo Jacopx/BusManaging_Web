@@ -128,17 +128,16 @@ function validatePass() {
         }
 
     } else {
-        repeatpass.style.border = "2px solid red"
+        // repeatpass.style.border = "2px solid red"
         returnValue = 0;
     }
 
     return returnValue;
-
 }
 
 function validateUser() {
     var user = document.getElementById("signup_user");
-    const regexMail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const regexMail = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
     var returnValue = -1;
 
@@ -146,7 +145,7 @@ function validateUser() {
         user.style.border = "";
         returnValue = 1;
     } else {
-        user.style.border = "2px solid red";
+        // user.style.border = "2px solid red";
         returnValue = 0;
     }
 
@@ -163,6 +162,7 @@ function showReservation() {
             } else if (JSON.parse(returnedData).t == 1) {
                 document.getElementById("signup_form").style.visibility = 'collapse';
                 document.getElementById("reservation-table").innerHTML = JSON.parse(returnedData).d;
+                document.getElementById("reservation-table").style.visibility = 'visible';
             }
         });
 }

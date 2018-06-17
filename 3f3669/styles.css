@@ -97,3 +97,8 @@ hr {
     border: none;
     background: #f1f1f1;
 }
+
+.reservation-table {
+    visibility: hidden;
+    border: 1px solid black;
+}
