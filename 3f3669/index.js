@@ -27,6 +27,25 @@ function getCookie(cname) {
     return "";
 }
 
+function updateCookie() {
+    var cookieUser = getCookie("polixbus_user");
+    var cookieHash = getCookie("polixbus_hash");
+
+    if (cookieUser != "" && cookieHash != "") {
+        var TIMEOUT = 2;
+        var d = new Date();
+
+        d.setTime(d.getTime() + (TIMEOUT*60*1000));
+        var expires = "expires="+ d.toUTCString();
+
+        document.cookie = "polixbus_user=" + cookieUser + ";" + expires + ";path=/";
+        document.cookie = "polixbus_hash=" + cookieHash + ";" + expires + ";path=/";
+    } else {
+        showLogin();
+    }
+
+}
+
 function showLogin() {
     document.getElementById("login").style.visibility = 'visible';     // Show
     document.getElementById("logged").style.visibility = 'hidden';      // Hide
@@ -155,6 +174,9 @@ function validateUser() {
 }
 
 function showReservation() {
+
+    updateCookie();
+
     // @TODO showing correct reservation for logged and not logged
     // @TODO improving table visualization
     $.post('getReservation.php', { field1: logged},

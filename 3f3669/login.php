@@ -31,11 +31,11 @@
 
                     $cookie_name = 'polixbus_user';
                     $cookie_value = $user;
-                    setcookie($cookie_name, $cookie_value, time() + (5*60), '/');
+                    setcookie($cookie_name, $cookie_value, time() + (TIMEOUT*60), '/');
 
                     $cookie_name = 'polixbus_hash';
                     $cookie_value = $row["pass"];
-                    setcookie($cookie_name, $cookie_value, time() + (5*60), '/');
+                    setcookie($cookie_name, $cookie_value, time() + (TIMEOUT*60), '/');
 
                     break;
 
