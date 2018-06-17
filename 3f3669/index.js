@@ -193,10 +193,15 @@ function showReservation() {
             }
         });
 
+    // @TODO: Shift hide/visual in a function
     if (userLogged != "") {
         document.getElementById("delete-reser").style.visibility = 'visible';
+        document.getElementById("make-reser").style.visibility = 'visible';
+        document.getElementById("reservation-request").style.visibility = 'visible';
     } else {
         document.getElementById("delete-reser").style.visibility = 'collapse';
+        document.getElementById("make-reser").style.visibility = 'collapse';
+        document.getElementById("reservation-request").style.visibility = 'collapse';
     }
 }
 
@@ -218,4 +223,38 @@ function deleteReservation() {
                 showReservation();
             }
         });
+}
+
+function makeReservation() {
+    //@TODO: Check if the user has already performed a reservation
+
+    updateCookie();
+    document.getElementById("reservation-table").innerHTML = "";
+    document.getElementById("reservation-table").style.visibility = 'visible';
+
+    var userLogged = getCookie("polixbus_user");
+    var start = document.getElementById("start").value;
+    var end = document.getElementById("end").value;
+    var num = document.getElementById("number").value;
+    
+    if (userLogged == "" || start == "" || end == "" || num == "") {
+
+        return;
+
+    } else {
+
+        $.post('makeReservation.php', { field1: userLogged, field2: start, field3: end, field4: num},
+            function(returnedData){
+                console.log(returnedData);
+                if (JSON.parse(returnedData).t == 0) {
+                    console.log(JSON.parse(returnedData).d);
+                    alert(JSON.parse(returnedData).d);
+                } else if (JSON.parse(returnedData).t == 1) {
+                    showReservation();
+                } else if (JSON.parse(returnedData).t == -1 || JSON.parse(returnedData).t == -2) {
+                    alert(JSON.parse(returnedData).d);
+                    showReservation();
+                }
+            });
+    }
 }

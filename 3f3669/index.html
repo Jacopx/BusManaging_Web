@@ -52,6 +52,19 @@
 
           </div>
           <button type="submit" onclick="deleteReservation();" id="delete-reser">Delete Reservation</button>
+          <table id="reservation-request">
+              <tr>
+                  <th>Start</th>
+                  <th>Stop</th>
+                  <th>Passengers</th>
+              </tr>
+              <tr>
+                  <td><input class="inputtext" name="start" id="start" required></td>
+                  <td><input class="inputtext" name="end" id="end" required></td>
+                  <td><input class="inputtext" name="number" id="number" required></td>
+              </tr>
+          </table>
+          <button type="submit" onclick="makeReservation();" id="make-reser">Make Reservation</button>
       </div>
       <div id="signup_form" class="signup_form">
           <div class="modal-content">

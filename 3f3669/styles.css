@@ -125,3 +125,7 @@ hr {
     background-color: #009966;
     color: white;
 }
+
+#reservation-request {
+    visibility: hidden;
+}
