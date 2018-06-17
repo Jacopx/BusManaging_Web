@@ -9,8 +9,6 @@ function checkCookie() {
     } else {
         showLogin();
     }
-
-    showReservation();
 }
 
 function getCookie(cname) {
@@ -46,9 +44,11 @@ function verifyCookie(user, hash) {
                 document.getElementById("logged").innerHTML = JSON.parse(returnedData).d;
                 showLogged();
                 logged = 1;
+                showReservation();
             } else {
                 logout();
                 logged = 0;
+                showReservation();
             }
         });
 }
