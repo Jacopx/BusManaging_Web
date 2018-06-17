@@ -108,12 +108,17 @@ function getReservation($logged) {
     }
 
     $data = "<table>";
+    if ($logged == 1) {
+        $data = $data . "<tr><th>Track</th><th>Total</th><th>Users</th></tr>";
+    } else {
+        $data = $data . "<tr><th>Track</th><th>Total</th></tr>";
+    }
 
     for ($i = 0; $i < count($segments); $i++) {
         if ($logged == 1) {
-            $data = $data . "<tr><td>" . $segments[$i] . "</td><td>Total: " . $passNumber[$i] . "</td><td>" . $rowString[$i] . "</td></tr>";
+            $data = $data . "<tr><td>" . $segments[$i] . "</td><td>" . $passNumber[$i] . "</td><td>" . $rowString[$i] . "</td></tr>";
         } else {
-            $data = $data . "<tr><td>" . $segments[$i] . "</td><td>Total: " . $passNumber[$i] . "</td></tr>";
+            $data = $data . "<tr><td>" . $segments[$i] . "</td><td>" . $passNumber[$i] . "</td></tr>";
         }
 
     }

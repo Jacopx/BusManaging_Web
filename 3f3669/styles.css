@@ -1,7 +1,7 @@
 body {
     font-family: Helvetica;
     color: white;
-    background-color: gainsboro;
+    background-color: lightgray;
 }
 
 .header {
@@ -102,7 +102,26 @@ hr {
     background: #f1f1f1;
 }
 
-.reservation-table {
+#reservation-table {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
     visibility: hidden;
-    border: 1px solid black;
+    width: 100%;
+}
+
+#reservation-table td, #reservation-table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#reservation-table tr:nth-child(even){background-color: #f2f2f2;}
+
+#reservation-table tr:hover {background-color: #ddd;}
+
+#reservation-table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #009966;
+    color: white;
 }
