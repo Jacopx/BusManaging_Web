@@ -1,5 +1,3 @@
-// var logged = -1; // -1 standard value | 0 not logged | "username" logged
-
 function checkCookie() {
     // ENFORCE HTTPS
     if (location.protocol != 'https:') {

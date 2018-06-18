@@ -17,6 +17,16 @@
     function signup($user, $pass) {
         //@TODO: Adding value verification before push in DB
         $type = -3; $data = -3;
+
+//        // Data verification
+//        $passPattern = "/^(?=.*[a-z])(?=.*[A-Z\d]).+$/";
+//        if (preg_match($passPattern, $pass) && filter_var($user, FILTER_VALIDATE_EMAIL)) {
+//            $type = 0;
+//            $data = "Server Side data verification failed!";
+//            echo json_encode(array("t" => $type, "d" => $data));
+//            die();
+//        }
+
         $conn = mysqli_connect(SQL_HOST, SQL_USER, SQL_PASS);
 
         if (mysqli_connect_errno()) {
