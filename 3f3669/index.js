@@ -1,6 +1,11 @@
 // var logged = -1; // -1 standard value | 0 not logged | "username" logged
 
 function checkCookie() {
+    // ENFORCE HTTPS
+    if (location.protocol != 'https:') {
+        location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+    }
+
     var cookieUser = getCookie("polixbus_user");
     var cookieHash = getCookie("polixbus_hash");
 
@@ -118,6 +123,7 @@ function signup() {
 
         $.post('signup.php', {field1: user, field2: pass},
             function (returnedData) {
+                console.log(returnedData);
                 if (JSON.parse(returnedData).t == 1) {
                     alert("Login successful");
                     location.reload();
@@ -127,6 +133,8 @@ function signup() {
                 } else if (JSON.parse(returnedData).t == -2) {
                     alert("Database error");
                     location.reload();
+                } else {
+                    alert(returnedData);
                 }
             });
     }

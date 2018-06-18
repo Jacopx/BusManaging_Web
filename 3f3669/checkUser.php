@@ -1,7 +1,16 @@
 <?php
     include 'base.php';
 
-    if(isset($_POST['field1']) && isset($_POST['field2'])) {
+    if(isset($_SERVER['HTTPS'])) {
+        if ($_SERVER['HTTPS'] == "on") {
+            $secure_connection = true;
+        } else {
+            echo "Connection NOT SECURE!!";
+            die();
+        }
+    }
+
+    if(isset($_POST['field1']) && isset($_POST['field2']) && $secure_connection) {
         checkCookie($_POST['field1'], $_POST['field2']);
     }
 
