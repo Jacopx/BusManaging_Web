@@ -108,11 +108,7 @@ function getReservation($logged) {
                         if (key_exists($i, $passNumber) && key_exists($i, $rowString)) {
                             $passNumber[$i] += $row["seats"];
                             $rowString[$i] = $rowString[$i] . $row["user"] . " (" . $row["seats"] . " passengers) ";
-                        } else {
-                            array_push($passNumber, $row["seats"]);
-                            array_push($rowString, $row["user"] . " (" . $row["seats"] . " passengers) ");
                         }
-
                     }
 
                 }

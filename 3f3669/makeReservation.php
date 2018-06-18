@@ -22,25 +22,13 @@ function makeReservation($user, $start, $end, $number) {
         die();
     }
 
-    $sql = "SELECT SUM(seats) FROM Reservations WHERE start>='$start' AND end<='$end'";
-    $result = mysqli_query($conn, $sql);
-
-    if (mysqli_num_rows($result) > 0) {
-        // output data of each row
-        while($row = mysqli_fetch_assoc($result)) {
-            if (($row["SUM(seats)"] + $number) <= BUS_SIZE) {
-                $allow = 1;
-            } else {
-                // @TODO: Fix seats count
-                $type = -1;
-                $data = "Adding not possible! Not enough seats on the bus!";
-                echo json_encode(array("t" => $type, "d" => $data));
-                die();
-            }
-        }
+    if ((getSeats($conn, $start, $end) + $number) <= BUS_SIZE) {
+        $allow = 1;
     } else {
-        $type = 0;
-        $data = "Internal error: user not found";
+        $type = -1;
+        $data = "Adding not possible! Not enough seats on the bus!";
+        echo json_encode(array("t" => $type, "d" => $data));
+        die();
     }
 
     if ($allow == 1) {
@@ -56,4 +44,88 @@ function makeReservation($user, $start, $end, $number) {
     }
 
     echo json_encode(array("t" => $type, "d" => $data));
+}
+
+function getSeats($conn, $start, $end) {
+    $stops = array();
+
+    // Getting starting stops
+    $sql = "SELECT start FROM Reservations ORDER BY start;";
+    $result1 = mysqli_query($conn, $sql);
+
+    if (mysqli_num_rows($result1) > 0) {
+        // output data of each row
+        while($row = mysqli_fetch_assoc($result1)) {
+            $add = 1;
+            foreach($stops as $key => $value) {
+                if ($row["start"] == $value) {
+                    $add = 0;
+                    break;
+                }
+            }
+            if($add == 1) {
+                array_push($stops, $row["start"]);
+            }
+        }
+    } else {
+        $type = 0;
+        $data = "Impossible getting starting places";
+        echo json_encode(array("t" => $type, "d" => $data));
+        die();
+    }
+
+    // Getting ending stops
+    $sql = "SELECT end FROM Reservations ORDER BY end;";
+    $result2 = mysqli_query($conn, $sql);
+
+    if (mysqli_num_rows($result2) > 0) {
+        // output data of each row
+        while($row = mysqli_fetch_assoc($result2)) {
+            $add = 1;
+            foreach($stops as $key => $value) {
+                if ($row["end"] == $value) {
+                    $add = 0;
+                    break;
+                }
+            }
+            if($add == 1) {
+                array_push($stops, $row["end"]);
+            }
+        }
+    } else {
+        $type = 0;
+        $data = "Impossible getting ending places";
+        echo json_encode(array("t" => $type, "d" => $data));
+        die();
+    }
+
+    sort($stops);
+    // Array_fill in order to allow empty segements
+    $passNumber = array_fill(0, (count($stops) - 1), 0);
+
+    // Getting users and preparing all for printing
+    $sql = "SELECT * FROM Reservations ORDER BY start, end;";
+    $result3 = mysqli_query($conn, $sql);
+
+    if (mysqli_num_rows($result3) > 0) {
+        // output data of each row
+        while($row = mysqli_fetch_assoc($result3)) {
+
+            for ($i = 0; $i < (count($stops) - 1); $i++) {
+
+                if ($row["start"] <= $stops[$i] && $row["end"] >=  $stops[($i + 1)]) {
+                    if ($stops[$i] >= $start && $stops[$i + 1] <= $end) {
+                        $passNumber[$i] += $row["seats"];
+                    }
+                }
+            }
+        }
+    } else {
+        $type = 0;
+        $data = "Impossible preparing output";
+        echo json_encode(array("t" => $type, "d" => $data));
+        die();
+    }
+
+    return max($passNumber);
 }
