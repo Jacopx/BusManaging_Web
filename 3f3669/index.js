@@ -50,16 +50,6 @@ function updateCookie() {
 
 }
 
-function showLogin() {
-    document.getElementById("login").style.visibility = 'visible';     // Show
-    document.getElementById("logged").style.visibility = 'hidden';      // Hide
-}
-
-function showLogged() {
-    document.getElementById("logged").style.visibility = 'visible';     // Show
-    document.getElementById("login").style.visibility = 'collapse';      // Hide
-}
-
 function verifyCookie(user, hash) {
     $.post('checkUser.php', { field1: user, field2 : hash},
         function(returnedData){
@@ -74,39 +64,22 @@ function verifyCookie(user, hash) {
         });
 }
 
-function login() {
-    // @TODO: Hide signup after login
-    // @TODO: Fix uncorrect positioning of table
-    var user = document.getElementById("user").value.toLowerCase();
-    var pass = document.getElementById("pass").value;
+function showLogin() {
+    document.getElementById("login").style.visibility = 'visible';     // Show
+    document.getElementById("logged").style.visibility = 'collapse';      // Hide
+}
 
-    $.post('login.php', { field1: user, field2 : pass},
-        function(returnedData){
-            if (JSON.parse(returnedData).t == 1) {
-                location.reload();
-            } else if (JSON.parse(returnedData).t == -1) {
-                alert("Wrong password");
-                location.reload();
-            } else if (JSON.parse(returnedData).t == -2) {
-                alert("User not found");
-                location.reload();
-            }
-        });
+function showLogged() {
+    document.getElementById("logged").style.visibility = 'visible';     // Show
+    document.getElementById("login").style.visibility = 'collapse';      // Hide
 }
 
 function showSignup() {
     document.getElementById("login").style.visibility = 'collapse';      // Hide
-    document.getElementById("logged").style.visibility = 'hidden';      // Hide
+    document.getElementById("logged").style.visibility = 'collapse';      // Hide
     document.getElementById("reservation-table").style.visibility = 'collapse';      // Hide
 
     document.getElementById("signup_form").style.visibility = 'visible';
-}
-
-function logout() {
-    document.cookie = "polixbus_user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    document.cookie = "polixbus_hash=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    location.reload();
-    // @TODO: Hide reservation div
 }
 
 function signup() {
@@ -136,6 +109,33 @@ function signup() {
                 }
             });
     }
+}
+
+function login() {
+    // @TODO: Hide signup after login
+    // @TODO: Fix uncorrect positioning of table
+    var user = document.getElementById("user").value.toLowerCase();
+    var pass = document.getElementById("pass").value;
+
+    $.post('login.php', { field1: user, field2 : pass},
+        function(returnedData){
+            if (JSON.parse(returnedData).t == 1) {
+                location.reload();
+            } else if (JSON.parse(returnedData).t == -1) {
+                alert("Wrong password");
+                location.reload();
+            } else if (JSON.parse(returnedData).t == -2) {
+                alert("User not found");
+                location.reload();
+            }
+        });
+}
+
+function logout() {
+    document.cookie = "polixbus_user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "polixbus_hash=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    location.reload();
+    // @TODO: Hide reservation div
 }
 
 function validatePass() {
@@ -180,6 +180,40 @@ function validateUser() {
     }
 
     return returnValue;
+}
+
+function makeReservation() {
+    //@TODO: Check if the user has already performed a reservation
+
+    updateCookie();
+    document.getElementById("reservation-table").innerHTML = "";
+    document.getElementById("reservation-table").style.visibility = 'visible';
+
+    var userLogged = getCookie("polixbus_user");
+    var start = document.getElementById("start").value;
+    var end = document.getElementById("end").value;
+    var num = document.getElementById("number").value;
+
+    if (userLogged == "" || start == "" || end == "" || num == "") {
+
+        return;
+
+    } else {
+
+        $.post('makeReservation.php', { field1: userLogged, field2: start, field3: end, field4: num},
+            function(returnedData){
+                console.log(returnedData);
+                if (JSON.parse(returnedData).t == 0) {
+                    console.log(JSON.parse(returnedData).d);
+                    alert(JSON.parse(returnedData).d);
+                } else if (JSON.parse(returnedData).t == 1) {
+                    showReservation();
+                } else if (JSON.parse(returnedData).t == -1 || JSON.parse(returnedData).t == -2) {
+                    alert(JSON.parse(returnedData).d);
+                    showReservation();
+                }
+            });
+    }
 }
 
 function showReservation() {
@@ -233,38 +267,4 @@ function deleteReservation() {
                 showReservation();
             }
         });
-}
-
-function makeReservation() {
-    //@TODO: Check if the user has already performed a reservation
-
-    updateCookie();
-    document.getElementById("reservation-table").innerHTML = "";
-    document.getElementById("reservation-table").style.visibility = 'visible';
-
-    var userLogged = getCookie("polixbus_user");
-    var start = document.getElementById("start").value;
-    var end = document.getElementById("end").value;
-    var num = document.getElementById("number").value;
-    
-    if (userLogged == "" || start == "" || end == "" || num == "") {
-
-        return;
-
-    } else {
-
-        $.post('makeReservation.php', { field1: userLogged, field2: start, field3: end, field4: num},
-            function(returnedData){
-                console.log(returnedData);
-                if (JSON.parse(returnedData).t == 0) {
-                    console.log(JSON.parse(returnedData).d);
-                    alert(JSON.parse(returnedData).d);
-                } else if (JSON.parse(returnedData).t == 1) {
-                    showReservation();
-                } else if (JSON.parse(returnedData).t == -1 || JSON.parse(returnedData).t == -2) {
-                    alert(JSON.parse(returnedData).d);
-                    showReservation();
-                }
-            });
-    }
 }
