@@ -31,6 +31,7 @@ function makeReservation($user, $start, $end, $number) {
             if (($row["SUM(seats)"] + $number) <= BUS_SIZE) {
                 $allow = 1;
             } else {
+                // @TODO: Fix seats count
                 $type = -1;
                 $data = "Adding not possible! Not enough seats on the bus!";
                 echo json_encode(array("t" => $type, "d" => $data));

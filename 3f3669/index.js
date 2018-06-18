@@ -72,6 +72,8 @@ function verifyCookie(user, hash) {
 }
 
 function login() {
+    // @TODO: Hide signup after login
+    // @TODO: Fix uncorrect positioning of table
     var user = document.getElementById("user").value.toLowerCase();
     var pass = document.getElementById("pass").value;
 
@@ -101,9 +103,11 @@ function logout() {
     document.cookie = "polixbus_user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "polixbus_hash=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     location.reload();
+    // @TODO: Hide reservation div
 }
 
 function signup() {
+    // @TODO: Logout before signup
     var rU = validateUser();
     var rP = validatePass();
 
