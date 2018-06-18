@@ -6,6 +6,7 @@ if(isset($_POST['field1']) && isset($_POST['field2'])) {
 }
 
 function signup($user, $pass) {
+    //@TODO: Adding value verification before push in DB
     $type = -3; $data = -3;
     $conn = mysqli_connect(SQL_HOST, SQL_USER, SQL_PASS);
 
