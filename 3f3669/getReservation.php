@@ -80,8 +80,9 @@ function getReservation($logged) {
         array_push($segments, $stops[$i] . " --> " . $stops[($i + 1)]);
     }
 
-    $passNumber = array();
-    $rowString = array();
+    // Array_fill in order to allow empty segements
+    $passNumber = array_fill(0, (count($stops) - 1), 0);
+    $rowString = array_fill(0, (count($stops) - 1), " ");
     $startPoint = -1;
     $endPoint = -1;
 
@@ -123,7 +124,6 @@ function getReservation($logged) {
         echo json_encode(array("t" => $type, "d" => $data));
         die();
     }
-
 
     $data = "<table>";
     if ($logged != "") {
