@@ -211,6 +211,9 @@ function makeReservation() {
                 } else if (JSON.parse(returnedData).t == -1 || JSON.parse(returnedData).t == -2) {
                     alert(JSON.parse(returnedData).d);
                     showReservation();
+                } else {
+                    alert("Reservation not possible!");
+                    showReservation();
                 }
             });
     }
