@@ -81,46 +81,32 @@
 
         retry:
         try {
-            // Getting starting stops
-            $sql = "SELECT start FROM Reservations ORDER BY start FOR UPDATE;";
+            // Getting stops
+            $sql = "SELECT start, end FROM Reservations FOR UPDATE;";
+            $result1 = mysqli_query($conn, $sql);
 
-            if(!($result1 = mysqli_query($conn, $sql)))
+            if(!$result1)
                 throw new Exception("Booking NOT possible!");
 
             if (mysqli_num_rows($result1) > 0) {
                 // output data of each row
                 while($row = mysqli_fetch_assoc($result1)) {
-                    $add = 1;
+                    $addS = 1; $addE = 1;
                     foreach($stops as $key => $value) {
                         if ($row["start"] == $value) {
-                            $add = 0;
+                            $addS = 0;
+                        }
+                        if ($row["end"] == $value) {
+                            $addE = 0;
+                        }
+                        if ($addS == 0 && $addE == 0) {
                             break;
                         }
                     }
-                    if($add == 1) {
+                    if($addS == 1) {
                         array_push($stops, $row["start"]);
                     }
-                }
-            }
-
-            // Getting ending stops
-            $sql = "SELECT end FROM Reservations ORDER BY end FOR UPDATE;";
-            $result2 = mysqli_query($conn, $sql);
-
-            if(!$result2)
-                throw new Exception("Booking NOT possible!");
-
-            if (mysqli_num_rows($result2) > 0) {
-                // output data of each row
-                while($row = mysqli_fetch_assoc($result2)) {
-                    $add = 1;
-                    foreach($stops as $key => $value) {
-                        if ($row["end"] == $value) {
-                            $add = 0;
-                            break;
-                        }
-                    }
-                    if($add == 1) {
+                    if($addE == 1) {
                         array_push($stops, $row["end"]);
                     }
                 }

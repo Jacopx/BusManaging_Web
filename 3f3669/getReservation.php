@@ -15,6 +15,7 @@
     }
 
     function getReservation($logged) {
+        //@TODO: Adding Deadlock prevention
         $type = -1;
         $conn = mysqli_connect(SQL_HOST, SQL_USER, SQL_PASS);
         $stops = array();
@@ -32,52 +33,35 @@
             die();
         }
 
-        // Getting starting stops
-        $sql = "SELECT start FROM Reservations ORDER BY start;";
+        // Getting stops
+        $sql = "SELECT start, end FROM Reservations;";
         $result1 = mysqli_query($conn, $sql);
 
         if (mysqli_num_rows($result1) > 0) {
             // output data of each row
             while($row = mysqli_fetch_assoc($result1)) {
-                $add = 1;
+                $addS = 1; $addE = 1;
                 foreach($stops as $key => $value) {
                     if ($row["start"] == $value) {
-                        $add = 0;
+                        $addS = 0;
+                    }
+                    if ($row["end"] == $value) {
+                        $addE = 0;
+                    }
+                    if ($addS == 0 && $addE == 0) {
                         break;
                     }
                 }
-                if($add == 1) {
+                if($addS == 1) {
                     array_push($stops, $row["start"]);
                 }
-            }
-        } else {
-            $type = 0;
-            $data = "Impossible getting starting places";
-            echo json_encode(array("t" => $type, "d" => $data));
-            die();
-        }
-
-        // Getting ending stops
-        $sql = "SELECT end FROM Reservations ORDER BY end;";
-        $result2 = mysqli_query($conn, $sql);
-
-        if (mysqli_num_rows($result2) > 0) {
-            // output data of each row
-            while($row = mysqli_fetch_assoc($result2)) {
-                $add = 1;
-                foreach($stops as $key => $value) {
-                    if ($row["end"] == $value) {
-                        $add = 0;
-                        break;
-                    }
-                }
-                if($add == 1) {
+                if($addE == 1) {
                     array_push($stops, $row["end"]);
                 }
             }
         } else {
             $type = 0;
-            $data = "Impossible getting ending places";
+            $data = "Impossible getting starting places";
             echo json_encode(array("t" => $type, "d" => $data));
             die();
         }
