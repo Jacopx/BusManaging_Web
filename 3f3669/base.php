@@ -5,6 +5,7 @@
     define("SQL_PASS", "dev");
     define("SQL_DB", "database");
     define("TIMEOUT", 2); // Time out in minutes for Cookie
+    define("MAX_ATTEMPT", 3)
 
     //define("BUS_SIZE", 4);
     //define("SQL_HOST", "localhost");

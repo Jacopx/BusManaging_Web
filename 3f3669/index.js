@@ -7,7 +7,7 @@ function checkCookie() {
     var cookieUser = getCookie("polixbus_user");
     var cookieHash = getCookie("polixbus_hash");
 
-    if (cookieUser != "" && cookieHash != "") {
+    if (cookieUser !== "" && cookieHash !== "") {
         verifyCookie(cookieUser, cookieHash);
     } else {
         showLogin();
@@ -20,10 +20,10 @@ function getCookie(cname) {
     var ca = decodedCookie.split(';');
     for(var i = 0; i <ca.length; i++) {
         var c = ca[i];
-        while (c.charAt(0) == ' ') {
+        while (c.charAt(0) === ' ') {
             c = c.substring(1);
         }
-        if (c.indexOf(name) == 0) {
+        if (c.indexOf(name) === 0) {
             return c.substring(name.length, c.length);
         }
     }
@@ -34,7 +34,7 @@ function updateCookie() {
     var cookieUser = getCookie("polixbus_user");
     var cookieHash = getCookie("polixbus_hash");
 
-    if (cookieUser != "" && cookieHash != "") {
+    if (cookieUser !== "" && cookieHash !== "") {
         var TIMEOUT = 2;
         var d = new Date();
 
@@ -53,7 +53,7 @@ function updateCookie() {
 function verifyCookie(user, hash) {
     $.post('checkUser.php', { field1: user, field2 : hash},
         function(returnedData){
-            if(JSON.parse(returnedData).t == 1) {
+            if(JSON.parse(returnedData).t === 1) {
                 document.getElementById("logged").innerHTML = JSON.parse(returnedData).d;
                 showLogged();
                 showReservation();
@@ -87,7 +87,7 @@ function signup() {
     var rU = validateUser();
     var rP = validatePass();
 
-    if(rU == 1 && rP == 1) {
+    if(rU === 1 && rP === 1) {
 
         var pass = document.getElementById("signup_pass").value;
         var user = document.getElementById("signup_user").value.toLowerCase();
@@ -95,13 +95,13 @@ function signup() {
         $.post('signup.php', {field1: user, field2: pass},
             function (returnedData) {
                 console.log(returnedData);
-                if (JSON.parse(returnedData).t == 1) {
+                if (JSON.parse(returnedData).t === 1) {
                     alert("Login successful");
                     location.reload();
-                } else if (JSON.parse(returnedData).t == -1) {
+                } else if (JSON.parse(returnedData).t === -1) {
                     alert("User already registered");
                     location.reload();
-                } else if (JSON.parse(returnedData).t == -2) {
+                } else if (JSON.parse(returnedData).t === -2) {
                     alert("Database error");
                     location.reload();
                 } else {
@@ -119,12 +119,12 @@ function login() {
 
     $.post('login.php', { field1: user, field2 : pass},
         function(returnedData){
-            if (JSON.parse(returnedData).t == 1) {
+            if (JSON.parse(returnedData).t === 1) {
                 location.reload();
-            } else if (JSON.parse(returnedData).t == -1) {
+            } else if (JSON.parse(returnedData).t === -1) {
                 alert("Wrong password");
                 location.reload();
-            } else if (JSON.parse(returnedData).t == -2) {
+            } else if (JSON.parse(returnedData).t === -2) {
                 alert("User not found");
                 location.reload();
             }
@@ -148,7 +148,7 @@ function validatePass() {
     var returnValue = -1;
 
     if(pass.value.match(lowerCaseLetters) && (pass.value.match(upperCaseLetters) || pass.value.match(numbers))) {
-        if(pass.value == repeatpass.value) {
+        if(pass.value === repeatpass.value) {
             pass.style.border = ""
             repeatpass.style.border = ""
             returnValue = 1;
@@ -194,7 +194,7 @@ function makeReservation() {
     var end = document.getElementById("end").value;
     var num = document.getElementById("number").value;
 
-    if (userLogged == "" || start == "" || end == "" || num == "") {
+    if (userLogged === "" || start === "" || end === "" || num === "") {
 
         return;
 
@@ -203,12 +203,13 @@ function makeReservation() {
         $.post('makeReservation.php', { field1: userLogged, field2: start, field3: end, field4: num},
             function(returnedData){
                 console.log(returnedData);
-                if (JSON.parse(returnedData).t == 0) {
-                    console.log(JSON.parse(returnedData).d);
+
+                if (JSON.parse(returnedData).t === 0) {
                     alert(JSON.parse(returnedData).d);
-                } else if (JSON.parse(returnedData).t == 1) {
                     showReservation();
-                } else if (JSON.parse(returnedData).t == -1 || JSON.parse(returnedData).t == -2) {
+                } else if (JSON.parse(returnedData).t === 1) {
+                    showReservation();
+                } else if (JSON.parse(returnedData).t === -1 || JSON.parse(returnedData).t === -2) {
                     alert(JSON.parse(returnedData).d);
                     showReservation();
                 } else {
@@ -230,10 +231,10 @@ function showReservation() {
     $.post('getReservation.php', { field1: userLogged},
         function(returnedData){
             console.log(returnedData);
-            if (JSON.parse(returnedData).t == 0) {
+            if (JSON.parse(returnedData).t === 0) {
                 console.log(JSON.parse(returnedData).d);
                 alert(JSON.parse(returnedData).d);
-            } else if (JSON.parse(returnedData).t == 1) {
+            } else if (JSON.parse(returnedData).t === 1) {
                 document.getElementById("signup_form").style.visibility = 'collapse';
                 document.getElementById("reservation-table").innerHTML = JSON.parse(returnedData).d;
                 document.getElementById("reservation-table").style.visibility = 'visible';
@@ -263,10 +264,10 @@ function deleteReservation() {
     $.post('deleteReservation.php', { field1: userLogged},
         function(returnedData){
             console.log(returnedData);
-            if (JSON.parse(returnedData).t == 0) {
+            if (JSON.parse(returnedData).t === 0) {
                 console.log(JSON.parse(returnedData).d);
                 alert(JSON.parse(returnedData).d);
-            } else if (JSON.parse(returnedData).t == 1) {
+            } else if (JSON.parse(returnedData).t === 1) {
                 showReservation();
             }
         });

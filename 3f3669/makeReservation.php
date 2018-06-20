@@ -17,6 +17,7 @@
     function makeReservation($user, $start, $end, $number) {
         //@TODO: Verify START BEFORE END
         //@TODO: Using prepared statement
+        //@TODO: Improve function with single query for START and STOPS
         $type = -1; $data = -1; $allow = 0;
         $conn = mysqli_connect(SQL_HOST, SQL_USER, SQL_PASS);
 
@@ -24,45 +25,28 @@
             $type = 0;
             $data ="Internal error: connection to DB failed ". mysqli_connect_error();
             echo json_encode(array("t" => $type, "d" => $data));
-            die();
+            exit();
         }
         if (!mysqli_select_db($conn, SQL_DB)) {
             $type = 0;
             $data = "Internal error: selection of DB failed";
             echo json_encode(array("t" => $type, "d" => $data));
-            die();
+            exit();
         }
 
         mysqli_autocommit($conn, FALSE);
         mysqli_query($conn, "START TRANSACTION;");
 
         if ((getSeats($conn, $start, $end) + $number) <= BUS_SIZE) {
-            $allow = 1;
-        } else {
-            mysqli_rollback($conn);
-            $type = -1;
-            $data = "Adding not possible! Not enough seats on the bus!";
-            echo json_encode(array("t" => $type, "d" => $data));
-            mysqli_close($conn);
-            die();
-        }
-
-        sleep(10);
-
-        if ($allow == 1) {
             try {
                 $sql = "INSERT INTO Reservations VALUES ('$user','$number','$start','$end')";
                 $result = mysqli_query($conn, $sql);
 
-                if(!$result)
+                if(!$result) {
                     throw new Exception("Insert failed");
-
-                if ($result) {
+                } else {
                     $type = 1;
                     $data = "Reservation added";
-                } else {
-                    $type = -2;
-                    $data = "Reservation ERROR!";
                 }
 
                 mysqli_commit($conn);
@@ -75,6 +59,13 @@
                 mysqli_close($conn);
                 die();
             }
+        } else {
+            mysqli_rollback($conn);
+            $type = -1;
+            $data = "Booking not possible, Not enough seats on the bus!";
+            echo json_encode(array("t" => $type, "d" => $data));
+            mysqli_close($conn);
+            die();
         }
 
         mysqli_close($conn);
@@ -84,17 +75,15 @@
 
     function getSeats($conn, $start, $end) {
         $stops = array();
-        $attemp = 0;
+        $attempt = 1;
 
         retry:
-
         try {
             // Getting starting stops
             $sql = "SELECT start FROM Reservations ORDER BY start FOR UPDATE;";
-            $result1 = mysqli_query($conn, $sql);
 
-            if(!$result1)
-                throw new Exception("Get reservation START failed");
+            if(!($result1 = mysqli_query($conn, $sql)))
+                throw new Exception("Booking NOT possible!");
 
             if (mysqli_num_rows($result1) > 0) {
                 // output data of each row
@@ -111,28 +100,13 @@
                     }
                 }
             }
-        } catch (Exception $e) {
-            if($attemp <= 3) {
-                $attemp++;
-                sleep(2);
-                goto retry;
-            } else {
-                mysqli_rollback($conn);
-                $type = 0;
-                $data = $e->getMessage();
-                echo json_encode(array("t" => $type, "d" => $data));
-                mysqli_close($conn);
-                die();
-            }
-        }
 
-        try {
             // Getting ending stops
             $sql = "SELECT end FROM Reservations ORDER BY end FOR UPDATE;";
             $result2 = mysqli_query($conn, $sql);
 
             if(!$result2)
-                throw new Exception("Get reservation END failed");
+                throw new Exception("Booking NOT possible!");
 
             if (mysqli_num_rows($result2) > 0) {
                 // output data of each row
@@ -149,32 +123,19 @@
                     }
                 }
             }
-        } catch (Exception $e) {
-            if($attemp <= 3) {
-                $attemp++;
-                sleep(2);
-                goto retry;
-            } else {
-                mysqli_rollback($conn);
-                $type = 0;
-                $data = $e->getMessage();
-                echo json_encode(array("t" => $type, "d" => $data));
-                mysqli_close($conn);
-                die();
-            }
-        }
 
-        sort($stops);
-        // Array_fill in order to allow empty segements
-        $passNumber = array_fill(0, (count($stops) - 1), 0);
+            sleep(5);
 
-        try {
+            sort($stops);
+            // Array_fill in order to allow empty segements
+            $passNumber = array_fill(0, (count($stops) - 1), 0);
+
             // Getting users and preparing all for printing
             $sql = "SELECT * FROM Reservations ORDER BY start, end FOR UPDATE;";
             $result3 = mysqli_query($conn, $sql);
 
             if(!$result3)
-                throw new Exception("Get reservation list failed");
+                throw new Exception("Booking NOT possible!");
 
             if (mysqli_num_rows($result3) > 0) {
                 // output data of each row
@@ -191,18 +152,20 @@
                 }
             }
         } catch (Exception $e) {
-            if($attemp <= 3) {
-                $attemp++;
-                sleep(2);
+
+            if ($attempt <= MAX_ATTEMPT) {
+                $attempt++;
+                sleep(TIMEOUT);
                 goto retry;
             } else {
                 mysqli_rollback($conn);
-                $type = 0;
+                $type = -1;
                 $data = $e->getMessage();
                 echo json_encode(array("t" => $type, "d" => $data));
                 mysqli_close($conn);
                 die();
             }
+
         }
 
         return max($passNumber);
