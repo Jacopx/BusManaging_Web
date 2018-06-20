@@ -19,7 +19,6 @@
     function makeReservation($user, $start, $end, $number) {
         //@TODO: Verify that user exist
         //@TODO: Using prepared statement
-        //@TODO: Improve function with single query for START and STOPS
         $type = -1; $data = -1;
         $conn = mysqli_connect(SQL_HOST, SQL_USER, SQL_PASS);
 
