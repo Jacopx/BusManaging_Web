@@ -126,8 +126,6 @@
                 }
             }
 
-            sleep(5);
-
             sort($stops);
             // Array_fill in order to allow empty segements
             $passNumber = array_fill(0, (count($stops) - 1), 0);
