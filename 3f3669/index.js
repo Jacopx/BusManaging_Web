@@ -200,23 +200,28 @@ function makeReservation() {
 
     } else {
 
-        $.post('makeReservation.php', { field1: userLogged, field2: start, field3: end, field4: num},
-            function(returnedData){
-                console.log(returnedData);
+        if (start < end) {
+            $.post('makeReservation.php', { field1: userLogged, field2: start, field3: end, field4: num},
+                function(returnedData){
+                    console.log(returnedData);
 
-                if (JSON.parse(returnedData).t === 0) {
-                    alert(JSON.parse(returnedData).d);
-                    showReservation();
-                } else if (JSON.parse(returnedData).t === 1) {
-                    showReservation();
-                } else if (JSON.parse(returnedData).t === -1 || JSON.parse(returnedData).t === -2) {
-                    alert(JSON.parse(returnedData).d);
-                    showReservation();
-                } else {
-                    alert("Reservation not possible!");
-                    showReservation();
-                }
-            });
+                    if (JSON.parse(returnedData).t === 0) {
+                        alert(JSON.parse(returnedData).d);
+                        showReservation();
+                    } else if (JSON.parse(returnedData).t === 1) {
+                        showReservation();
+                    } else if (JSON.parse(returnedData).t === -1 || JSON.parse(returnedData).t === -2) {
+                        alert(JSON.parse(returnedData).d);
+                        showReservation();
+                    } else {
+                        alert("Reservation not possible!");
+                        showReservation();
+                    }
+                });
+        } else {
+            alert("STARTING place must precede ENDING!");
+            showReservation();
+        }
     }
 }
 

@@ -11,14 +11,16 @@
     }
 
     if(isset($_POST['field1']) && isset($_POST['field2']) && isset($_POST['field3']) && isset($_POST['field4']) && $secure_connection) {
-        makeReservation($_POST['field1'], $_POST['field2'], $_POST['field3'], $_POST['field4']);
+        if ($_POST['field2'] < $_POST['field3']) {
+            makeReservation($_POST['field1'], $_POST['field2'], $_POST['field3'], $_POST['field4']);
+        }
     }
 
     function makeReservation($user, $start, $end, $number) {
-        //@TODO: Verify START BEFORE END
+        //@TODO: Verify that user exist
         //@TODO: Using prepared statement
         //@TODO: Improve function with single query for START and STOPS
-        $type = -1; $data = -1; $allow = 0;
+        $type = -1; $data = -1;
         $conn = mysqli_connect(SQL_HOST, SQL_USER, SQL_PASS);
 
         if (mysqli_connect_errno()) {
