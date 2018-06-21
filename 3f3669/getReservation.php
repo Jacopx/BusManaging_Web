@@ -114,7 +114,7 @@
             }
 
         } catch (Exception $e) {
-            $type = -1;
+            $type = 0;
             $data = $e->getMessage();
             goto end;
         }

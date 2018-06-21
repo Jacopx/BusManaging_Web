@@ -118,6 +118,8 @@
 
         }
 
+        sleep(10);
+
         $stmt = $mysqli->prepare("INSERT INTO Reservations VALUES (?,?,?,?);");
 
         if (max($passNumber) + $number <= BUS_SIZE) {

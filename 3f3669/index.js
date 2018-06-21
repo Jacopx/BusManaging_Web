@@ -44,7 +44,6 @@ function updateCookie() {
         document.cookie = "polixbus_user=" + cookieUser + ";" + expires + ";path=/";
         document.cookie = "polixbus_hash=" + cookieHash + ";" + expires + ";path=/";
     } else {
-        // location.reload();
         showLogin();
     }
 
@@ -151,7 +150,6 @@ function validatePass() {
         }
 
     } else {
-        // repeatpass.style.border = "2px solid red"
         returnValue = 0;
     }
 
@@ -187,24 +185,13 @@ function makeReservation() {
     var end = document.getElementById("end").value;
     var num = document.getElementById("number").value;
 
-    if (userLogged === "" || start === "" || end === "" || num === "") {
-
-        return;
-
-    } else {
-
+    if (!(userLogged === "" || start === "" || end === "" || num === "")) {
         if (start < end) {
             $.post('makeReservation.php', { field1: userLogged, field2: start, field3: end, field4: num},
                 function(returnedData){
                     console.log(returnedData);
 
-                    if (JSON.parse(returnedData).t === 0) {
-                        alert(JSON.parse(returnedData).d);
-                        showReservation();
-                    } else if (JSON.parse(returnedData).t === 1) {
-                        showReservation();
-                    } else if (JSON.parse(returnedData).t === -1 || JSON.parse(returnedData).t === -2) {
-                        alert(JSON.parse(returnedData).d);
+                    if (JSON.parse(returnedData).t === 1) {
                         showReservation();
                     } else {
                         alert("Reservation not possible!");
@@ -229,13 +216,13 @@ function showReservation() {
     $.post('getReservation.php', { field1: userLogged},
         function(returnedData){
             console.log(returnedData);
-            if (JSON.parse(returnedData).t === 0) {
-                console.log(JSON.parse(returnedData).d);
-                alert(JSON.parse(returnedData).d);
-            } else if (JSON.parse(returnedData).t === 1) {
+            if (JSON.parse(returnedData).t === 1) {
                 document.getElementById("signup_form").style.visibility = 'collapse';
                 document.getElementById("reservation-table").innerHTML = JSON.parse(returnedData).d;
                 document.getElementById("reservation-table").style.visibility = 'visible';
+            } else {
+                console.log(JSON.parse(returnedData).d);
+                alert(JSON.parse(returnedData).d);
             }
         });
 
@@ -262,10 +249,10 @@ function deleteReservation() {
     $.post('deleteReservation.php', { field1: userLogged},
         function(returnedData){
             console.log(returnedData);
-            if (JSON.parse(returnedData).t === 0) {
-                console.log(JSON.parse(returnedData).d);
+            if (JSON.parse(returnedData).t === 1) {
+                showReservation();
+            } else {
                 alert(JSON.parse(returnedData).d);
-            } else if (JSON.parse(returnedData).t === 1) {
                 showReservation();
             }
         });
