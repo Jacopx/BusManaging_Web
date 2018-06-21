@@ -34,10 +34,7 @@
         if($result->num_rows === 0) {
             $type = -2;
             $data = "User not found!";
-            echo json_encode(array("t" => $type, "d" => $data));
-            $stmt->close();
-            $mysqli->close();
-            die();
+            goto end;
         }
 
         while($row = $result->fetch_assoc()) {
@@ -60,13 +57,11 @@
                 // FAIL - WRONG PASSWORD
                 $type = -1;
                 $data = "Wrong password!";
-                echo json_encode(array("t" => $type, "d" => $data));
-                $stmt->close();
-                $mysqli->close();
-                die();
+                goto end;
             }
         }
 
+        end:
         $stmt->close();
         $mysqli->close();
         echo json_encode(array("t" => $type, "d" => $data));

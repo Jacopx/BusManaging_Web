@@ -45,10 +45,7 @@
 
             $type = -1;
             $data = "User already registered!";
-            echo json_encode(array("t" => $type, "d" => $data));
-            $stmt->close();
-            $mysqli->close();
-            die();
+            goto end;
 
         } else {
 
@@ -67,14 +64,12 @@
 
                 $type = -1;
                 $data = "Error, signup not possible";
-                echo json_encode(array("t" => $type, "d" => $data));
-                $stmt->close();
-                $mysqli->close();
-                die();
+                goto end;
 
             }
         }
 
+        end:
         $stmt->close();
         $mysqli->close();
         echo json_encode(array("t" => $type, "d" => $data));

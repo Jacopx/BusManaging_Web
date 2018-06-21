@@ -58,6 +58,7 @@ function verifyCookie(user, hash) {
                 showLogged();
                 showReservation();
             } else {
+                alert(JSON.parse(returnedData).d);
                 logout();
                 showReservation();
             }

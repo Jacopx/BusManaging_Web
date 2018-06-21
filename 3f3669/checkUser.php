@@ -16,33 +16,40 @@
 
     function checkCookie($user, $hash) {
         $type = -1; $data = -1;
-        $conn = mysqli_connect(SQL_HOST, SQL_USER, SQL_PASS);
 
-        if (mysqli_connect_errno()) {
+        try {
+            $mysqli = new mysqli(SQL_HOST, SQL_USER, SQL_PASS, SQL_DB);
+        } catch(Exception $e) {
             $type = 0;
-            $data ="Internal error: connection to DB failed ". mysqli_connect_error();
-        }
-        if (!mysqli_select_db($conn, SQL_DB)) {
-            $type = 0;
-            $data = "Internal error: selection of DB failed";
+            $data ="Internal error: connection to DB failed ";
+            echo json_encode(array("t" => $type, "d" => $data));
+            die();
         }
 
-        $sql = "SELECT * FROM Users WHERE user='$user'";
-        $result = mysqli_query($conn, $sql);
+        $stmt = $mysqli->prepare("SELECT * FROM Users WHERE user=?");
+        $stmt->bind_param("s", $user);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-        if (mysqli_num_rows($result) > 0) {
-            // output data of each row
-            while($row = mysqli_fetch_assoc($result)) {
+        if($result->num_rows === 0) {
+            $type = -2;
+            $data = "Cookie error, user not found!";
+            goto end;
+        }
 
-                if ($hash == $row["pass"]) {
-                    $type = 1;
-                    $data = "Welcome, " . $user . "<br>";
-                }
+        while($row = $result->fetch_assoc()) {
+            if ($hash == $row["pass"]) {
+                $type = 1;
+                $data = "Welcome, " . $user . "<br>";
+            } else {
+                $type = 1;
+                $data = "Cookie error, password not match";
             }
-        } else {
-            $type = 0;
-            $data = "Internal error: user not found";
         }
 
+        end:
+        $stmt->close();
+        $mysqli->close();
         echo json_encode(array("t" => $type, "d" => $data));
+        die();
     }
