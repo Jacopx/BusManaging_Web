@@ -15,32 +15,33 @@
     }
 
     function getReservation($logged) {
-        //@TODO: Adding Deadlock prevention
-        $type = -1;
-        $conn = mysqli_connect(SQL_HOST, SQL_USER, SQL_PASS);
-        $stops = array();
+        $type = -1; $stops = array();
 
-        if (mysqli_connect_errno()) {
+        try {
+            $mysqli = new mysqli(SQL_HOST, SQL_USER, SQL_PASS, SQL_DB);
+        } catch(Exception $e) {
             $type = 0;
-            $data ="Internal error: connection to DB failed ". mysqli_connect_error();
-            echo json_encode(array("t" => $type, "d" => $data));
-            die();
-        }
-        if (!mysqli_select_db($conn, SQL_DB)) {
-            $type = 0;
-            $data = "Internal error: selection of DB failed";
+            $data ="Internal error: connection to DB failed ";
             echo json_encode(array("t" => $type, "d" => $data));
             die();
         }
 
-        // Getting stops
-        $sql = "SELECT start, end FROM Reservations;";
-        $result1 = mysqli_query($conn, $sql);
+        $stmt = $mysqli->prepare("SELECT * FROM Reservations ORDER BY start, end;");
 
-        if (mysqli_num_rows($result1) > 0) {
-            // output data of each row
-            while($row = mysqli_fetch_assoc($result1)) {
+        try {
+
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if($result->num_rows <= 0) {
+                $type = 0;
+                $data = "Impossible getting stops";
+                goto end;
+            }
+
+            while($row = $result->fetch_assoc()) {
                 $addS = 1; $addE = 1;
+
                 foreach($stops as $key => $value) {
                     if ($row["start"] == $value) {
                         $addS = 0;
@@ -52,6 +53,7 @@
                         break;
                     }
                 }
+
                 if($addS == 1) {
                     array_push($stops, $row["start"]);
                 }
@@ -59,11 +61,11 @@
                     array_push($stops, $row["end"]);
                 }
             }
-        } else {
-            $type = 0;
-            $data = "Impossible getting starting places";
-            echo json_encode(array("t" => $type, "d" => $data));
-            die();
+
+        } catch (Exception $e) {
+            $type = -1;
+            $data = "Impossible getting reservation!";
+            goto end;
         }
 
         sort($stops);
@@ -79,39 +81,41 @@
         $startPoint = -1;
         $endPoint = -1;
 
-        // Getting users and preparing all for printing
-        $sql = "SELECT * FROM Reservations ORDER BY start, end;";
-        $result3 = mysqli_query($conn, $sql);
+        try {
 
-        if (mysqli_num_rows($result3) > 0) {
-            // output data of each row
-            while($row = mysqli_fetch_assoc($result3)) {
+            $stmt->execute();
+            $result2 = $stmt->get_result();
 
-                    for ($i = 0; $i < (count($stops) - 1); $i++) {
+            if($result2->num_rows <= 0) {
+                $type = 0;
+                $data = "Impossible preparing output";
+                goto end;
+            }
 
-                        if ($row["start"] <= $stops[$i] && $row["end"] >=  $stops[($i + 1)]) {
+            while($row = $result2->fetch_assoc()) {
+                for ($i = 0; $i < (count($stops) - 1); $i++) {
 
-                            if ($row["start"] == $stops[$i] && $logged == $row["user"]) {
-                                $startPoint = $i;
-                            }
-                            if  ($row["end"] == $stops[($i + 1)] && $logged == $row["user"]) {
-                                $endPoint = $i;
-                            }
+                    if ($row["start"] <= $stops[$i] && $row["end"] >=  $stops[($i + 1)]) {
 
-                            if (key_exists($i, $passNumber) && key_exists($i, $rowString)) {
-                                $passNumber[$i] += $row["seats"];
-                                $rowString[$i] = $rowString[$i] . $row["user"] . " (" . $row["seats"] . " passengers) ";
-                            }
+                        if ($row["start"] == $stops[$i] && $logged == $row["user"]) {
+                            $startPoint = $i;
+                        }
+                        if  ($row["end"] == $stops[($i + 1)] && $logged == $row["user"]) {
+                            $endPoint = $i;
                         }
 
+                        if (key_exists($i, $passNumber) && key_exists($i, $rowString)) {
+                            $passNumber[$i] += $row["seats"];
+                            $rowString[$i] = $rowString[$i] . $row["user"] . " (" . $row["seats"] . " passengers) ";
+                        }
                     }
-
+                }
             }
-        } else {
-            $type = 0;
-            $data = "Impossible preparing output";
-            echo json_encode(array("t" => $type, "d" => $data));
-            die();
+
+        } catch (Exception $e) {
+            $type = -1;
+            $data = "Impossible getting reservation!";
+            goto end;
         }
 
         $data = "<table>";
@@ -142,5 +146,9 @@
 
         $data = $data . "</table>";
 
+        end:
+        $stmt->close();
+        $mysqli->close();
         echo json_encode(array("t" => $type, "d" => $data));
+        die();
     }
