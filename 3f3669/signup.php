@@ -59,9 +59,8 @@
             $stmt = $mysqli->prepare("INSERT INTO Users VALUES (?,?)");
             $stmt->bind_param("ss", $user, $hash);
             $stmt->execute();
-            $result = $stmt->get_result();
 
-            if ($result == NULL || $result === FALSE) {
+            if ($stmt->affected_rows === 0) {
                 throw new Exception("Registration impossible");
             }
 

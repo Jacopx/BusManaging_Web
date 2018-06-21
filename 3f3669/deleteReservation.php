@@ -14,25 +14,26 @@
         deleteReservation($_POST['field1']);
     }
 
-    function deleteReservation($logged) {
-        $type = -1; $data = -1;
+    function deleteReservation($logged)
+    {
+        $type = -1;
+        $data = -1;
 
         try {
             $mysqli = new mysqli(SQL_HOST, SQL_USER, SQL_PASS, SQL_DB);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $type = 0;
-            $data ="Internal error: connection to DB failed ";
+            $data = "Internal error: connection to DB failed ";
             echo json_encode(array("t" => $type, "d" => $data));
             die();
         }
 
         $stmt = $mysqli->prepare("DELETE FROM Reservations WHERE user=?");
         try {
-            $stmt->bind_param("s", $user);
+            $stmt->bind_param("s", $logged);
             $stmt->execute();
-            $result = $stmt->get_result();
 
-            if ($result == NULL || $result === FALSE) {
+            if ($stmt->affected_rows === 0) {
                 throw new Exception("Impossible delete reservation!");
             }
 
@@ -50,6 +51,4 @@
         $mysqli->close();
         echo json_encode(array("t" => $type, "d" => $data));
         die();
-
-        echo json_encode(array("t" => $type, "d" => $data));
     }

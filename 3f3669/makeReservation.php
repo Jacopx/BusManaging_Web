@@ -118,7 +118,7 @@
 
         }
 
-        $stmt = $mysqli->prepare("INSERT INTO Reservations VALUES (?,?,?,?)");
+        $stmt = $mysqli->prepare("INSERT INTO Reservations VALUES (?,?,?,?);");
 
         if (max($passNumber) + $number <= BUS_SIZE) {
             try {
@@ -126,9 +126,7 @@
                 $stmt->bind_param("ssss", $user, $number, $start, $end);
                 $stmt->execute();
 
-                $result = $stmt->get_result();
-
-                if ($result == NULL || $result === FALSE) {
+                if ($stmt->affected_rows === 0) {
                     throw new Exception("Insert not possible");
                 }
 
