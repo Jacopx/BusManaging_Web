@@ -33,6 +33,10 @@
             $stmt->execute();
             $result = $stmt->get_result();
 
+            if ($result == NULL || $result === FALSE) {
+                throw new Exception("Impossible perform query for stops");
+            }
+
             if($result->num_rows <= 0) {
                 $type = 0;
                 $data = "Impossible getting stops";
@@ -62,29 +66,26 @@
                 }
             }
 
-        } catch (Exception $e) {
-            $type = -1;
-            $data = "Impossible getting reservation!";
-            goto end;
-        }
+            sort($stops);
+            $segments = array();
 
-        sort($stops);
-        $segments = array();
+            for ($i = 0; $i < (count($stops) - 1); $i++) {
+                array_push($segments, $stops[$i] . " --> " . $stops[($i + 1)]);
+            }
 
-        for ($i = 0; $i < (count($stops) - 1); $i++) {
-            array_push($segments, $stops[$i] . " --> " . $stops[($i + 1)]);
-        }
+            // Array_fill in order to allow empty segements
+            $passNumber = array_fill(0, (count($stops) - 1), 0);
+            $rowString = array_fill(0, (count($stops) - 1), " ");
+            $startPoint = -1;
+            $endPoint = -1;
 
-        // Array_fill in order to allow empty segements
-        $passNumber = array_fill(0, (count($stops) - 1), 0);
-        $rowString = array_fill(0, (count($stops) - 1), " ");
-        $startPoint = -1;
-        $endPoint = -1;
-
-        try {
 
             $stmt->execute();
             $result2 = $stmt->get_result();
+
+            if ($result == NULL || $result === FALSE) {
+                throw new Exception("Impossible getting reservation!");
+            }
 
             if($result2->num_rows <= 0) {
                 $type = 0;
@@ -114,7 +115,7 @@
 
         } catch (Exception $e) {
             $type = -1;
-            $data = "Impossible getting reservation!";
+            $data = $e->getMessage();
             goto end;
         }
 

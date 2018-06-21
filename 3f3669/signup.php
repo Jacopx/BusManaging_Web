@@ -37,36 +37,42 @@
         }
 
         $stmt = $mysqli->prepare("SELECT * FROM Users WHERE user=?");
-        $stmt->bind_param("s", $user);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        try {
+            $stmt->bind_param("s", $user);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
-        if($result->num_rows > 0) {
+            if ($result == NULL || $result === FALSE) {
+                throw new Exception("Impossible verify user!");
+            }
 
-            $type = -1;
-            $data = "User already registered!";
-            goto end;
-
-        } else {
-
-            $hash = password_hash($pass, PASSWORD_DEFAULT);
-
-            try {
-                $stmt = $mysqli->prepare("INSERT INTO Users VALUES (?,?)");
-                $stmt->bind_param("ss", $user, $hash);
-                $stmt->execute();
-
-                // SUCCESS
-                $type = 1;
-                $data = "Signup successful";
-
-            } catch (Exception $e) {
+            if($result->num_rows > 0) {
 
                 $type = -1;
-                $data = "Error, signup not possible";
+                $data = "User already registered!";
                 goto end;
 
             }
+
+            $hash = password_hash($pass, PASSWORD_DEFAULT);
+
+            $stmt = $mysqli->prepare("INSERT INTO Users VALUES (?,?)");
+            $stmt->bind_param("ss", $user, $hash);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result == NULL || $result === FALSE) {
+                throw new Exception("Registration impossible");
+            }
+
+            // SUCCESS
+            $type = 1;
+            $data = "Signup successful";
+
+        } catch (Exception $e) {
+            $type = -1;
+            $data = $e->getMessage();
+            goto end;
         }
 
         end:

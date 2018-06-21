@@ -16,31 +16,40 @@
 
     function deleteReservation($logged) {
         $type = -1; $data = -1;
-        $conn = mysqli_connect(SQL_HOST, SQL_USER, SQL_PASS);
 
-        if (mysqli_connect_errno()) {
+        try {
+            $mysqli = new mysqli(SQL_HOST, SQL_USER, SQL_PASS, SQL_DB);
+        } catch(Exception $e) {
             $type = 0;
-            $data ="Internal error: connection to DB failed ". mysqli_connect_error();
-            echo json_encode(array("t" => $type, "d" => $data));
-            die();
-        }
-        if (!mysqli_select_db($conn, SQL_DB)) {
-            $type = 0;
-            $data = "Internal error: selection of DB failed";
+            $data ="Internal error: connection to DB failed ";
             echo json_encode(array("t" => $type, "d" => $data));
             die();
         }
 
-        $sql = "DELETE FROM Reservations WHERE user='$logged'";
-        $result = mysqli_query($conn, $sql);
+        $stmt = $mysqli->prepare("DELETE FROM Reservations WHERE user=?");
+        try {
+            $stmt->bind_param("s", $user);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
-        if ($result) {
+            if ($result == NULL || $result === FALSE) {
+                throw new Exception("Impossible delete reservation!");
+            }
+
             $type = 1;
             $data = "Delete correctly performed!";
-        } else {
-            $type = 0;
-            $data = "Internal error: user not found";
+
+        } catch (Exception $e) {
+            $type = -1;
+            $data = $e->getMessage();
+            goto end;
         }
+
+        end:
+        $stmt->close();
+        $mysqli->close();
+        echo json_encode(array("t" => $type, "d" => $data));
+        die();
 
         echo json_encode(array("t" => $type, "d" => $data));
     }

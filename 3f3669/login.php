@@ -27,39 +27,53 @@
         }
 
         $stmt = $mysqli->prepare("SELECT * FROM Users WHERE user=?");
-        $stmt->bind_param("s", $user);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        try {
 
-        if($result->num_rows === 0) {
-            $type = -2;
-            $data = "User not found!";
+            $stmt->bind_param("s", $user);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result == NULL || $result === FALSE) {
+                throw new Exception("Impossible verify user!");
+            }
+
+            if($result->num_rows === 0) {
+                $type = -2;
+                $data = "User not found!";
+                goto end;
+            }
+
+            while($row = $result->fetch_assoc()) {
+                if (password_verify($pass, $row["pass"])) {
+                    // SUCCESS
+                    $type = 1;
+                    $data = 'Password is valid!<br><br>Welcome ' . $user . ' <br>';
+
+                    $cookie_name = 'polixbus_user';
+                    $cookie_value = $user;
+                    setcookie($cookie_name, $cookie_value, time() + (TIMEOUT*60), '/');
+
+                    $cookie_name = 'polixbus_hash';
+                    $cookie_value = $row["pass"];
+                    setcookie($cookie_name, $cookie_value, time() + (TIMEOUT*60), '/');
+
+                    break;
+
+                } else {
+                    // FAIL - WRONG PASSWORD
+                    $type = -1;
+                    $data = "Wrong password!";
+                    goto end;
+                }
+            }
+
+        } catch (Exception $e) {
+            $type = 0;
+            $data = $e->getMessage();
+            $mysqli->rollback();
             goto end;
         }
 
-        while($row = $result->fetch_assoc()) {
-            if (password_verify($pass, $row["pass"])) {
-                // SUCCESS
-                $type = 1;
-                $data = 'Password is valid!<br><br>Welcome ' . $user . ' <br>';
-
-                $cookie_name = 'polixbus_user';
-                $cookie_value = $user;
-                setcookie($cookie_name, $cookie_value, time() + (TIMEOUT*60), '/');
-
-                $cookie_name = 'polixbus_hash';
-                $cookie_value = $row["pass"];
-                setcookie($cookie_name, $cookie_value, time() + (TIMEOUT*60), '/');
-
-                break;
-
-            } else {
-                // FAIL - WRONG PASSWORD
-                $type = -1;
-                $data = "Wrong password!";
-                goto end;
-            }
-        }
 
         end:
         $stmt->close();

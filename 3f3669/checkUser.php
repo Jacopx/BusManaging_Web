@@ -27,24 +27,35 @@
         }
 
         $stmt = $mysqli->prepare("SELECT * FROM Users WHERE user=?");
-        $stmt->bind_param("s", $user);
-        $stmt->execute();
-        $result = $stmt->get_result();
 
-        if($result->num_rows === 0) {
-            $type = -2;
-            $data = "Cookie error, user not found!";
-            goto end;
-        }
+        try {
+            $stmt->bind_param("s", $user);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
-        while($row = $result->fetch_assoc()) {
-            if ($hash == $row["pass"]) {
-                $type = 1;
-                $data = "Welcome, " . $user . "<br>";
-            } else {
-                $type = 1;
-                $data = "Cookie error, password not match";
+            if ($result == NULL || $result === FALSE) {
+                throw new Exception("Error reading user!");
             }
+
+            if($result->num_rows === 0) {
+                $type = -2;
+                $data = "Cookie error, user not found!";
+                goto end;
+            }
+
+            while($row = $result->fetch_assoc()) {
+                if ($hash == $row["pass"]) {
+                    $type = 1;
+                    $data = "Welcome, " . $user . "<br>";
+                } else {
+                    $type = 1;
+                    $data = "Cookie error, password not match";
+                }
+            }
+        } catch (Exception $e) {
+            $type = -1;
+            $data = $e->getMessage();
+            goto end;
         }
 
         end:
