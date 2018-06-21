@@ -16,56 +16,59 @@
 
     function login($user, $pass) {
         $type = -3; $data = -3;
-        $conn = mysqli_connect(SQL_HOST, SQL_USER, SQL_PASS);
 
-        if (mysqli_connect_errno()) {
+        try {
+            $mysqli = new mysqli(SQL_HOST, SQL_USER, SQL_PASS, SQL_DB);
+        } catch(Exception $e) {
             $type = 0;
-            $data ="Internal error: connection to DB failed ". mysqli_connect_error();
-            echo json_encode(array("t" => $type, "d" => $data));
-            die();
-        }
-        if (!mysqli_select_db($conn, SQL_DB)) {
-            $type = 0;
-            $data = "Internal error: selection of DB failed";
+            $data ="Internal error: connection to DB failed ";
             echo json_encode(array("t" => $type, "d" => $data));
             die();
         }
 
-        $sql = "SELECT * FROM Users WHERE user='$user'";
-        $result = mysqli_query($conn, $sql);
+        $stmt = $mysqli->prepare("SELECT * FROM Users WHERE user=?");
+        $stmt->bind_param("s", $user);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-        if (mysqli_num_rows($result) > 0) {
-            // output data of each row
-            while($row = mysqli_fetch_assoc($result)) {
-
-                if (password_verify($pass, $row["pass"])) {
-                    // SUCCESS
-                    $type = 1;
-                    $data = 'Password is valid!<br><br>Welcome ' . $user . ' <br>';
-
-                    $cookie_name = 'polixbus_user';
-                    $cookie_value = $user;
-                    setcookie($cookie_name, $cookie_value, time() + (TIMEOUT*60), '/');
-
-                    $cookie_name = 'polixbus_hash';
-                    $cookie_value = $row["pass"];
-                    setcookie($cookie_name, $cookie_value, time() + (TIMEOUT*60), '/');
-
-                    break;
-
-                } else {
-                    // FAIL - WRONG PASSWORD
-                    $type = -1;
-                    $data = 0;
-                    break;
-                }
-
-            }
-        } else {
-            // FAIL - USER NOT FOUND
+        if($result->num_rows === 0) {
             $type = -2;
-            $data = 0;
+            $data = "User not found!";
+            echo json_encode(array("t" => $type, "d" => $data));
+            $stmt->close();
+            $mysqli->close();
+            die();
         }
 
+        while($row = $result->fetch_assoc()) {
+            if (password_verify($pass, $row["pass"])) {
+                // SUCCESS
+                $type = 1;
+                $data = 'Password is valid!<br><br>Welcome ' . $user . ' <br>';
+
+                $cookie_name = 'polixbus_user';
+                $cookie_value = $user;
+                setcookie($cookie_name, $cookie_value, time() + (TIMEOUT*60), '/');
+
+                $cookie_name = 'polixbus_hash';
+                $cookie_value = $row["pass"];
+                setcookie($cookie_name, $cookie_value, time() + (TIMEOUT*60), '/');
+
+                break;
+
+            } else {
+                // FAIL - WRONG PASSWORD
+                $type = -1;
+                $data = "Wrong password!";
+                echo json_encode(array("t" => $type, "d" => $data));
+                $stmt->close();
+                $mysqli->close();
+                die();
+            }
+        }
+
+        $stmt->close();
+        $mysqli->close();
         echo json_encode(array("t" => $type, "d" => $data));
+        die();
 }

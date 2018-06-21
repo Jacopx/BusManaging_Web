@@ -96,16 +96,11 @@ function signup() {
             function (returnedData) {
                 console.log(returnedData);
                 if (JSON.parse(returnedData).t === 1) {
-                    alert("Login successful");
-                    location.reload();
-                } else if (JSON.parse(returnedData).t === -1) {
-                    alert("User already registered");
-                    location.reload();
-                } else if (JSON.parse(returnedData).t === -2) {
-                    alert("Database error");
+                    alert(JSON.parse(returnedData).d);
                     location.reload();
                 } else {
-                    alert(returnedData);
+                    alert(JSON.parse(returnedData).d);
+                    location.reload();
                 }
             });
     }
@@ -121,11 +116,8 @@ function login() {
         function(returnedData){
             if (JSON.parse(returnedData).t === 1) {
                 location.reload();
-            } else if (JSON.parse(returnedData).t === -1) {
-                alert("Wrong password");
-                location.reload();
-            } else if (JSON.parse(returnedData).t === -2) {
-                alert("User not found");
+            } else {
+                alert(JSON.parse(returnedData).d);
                 location.reload();
             }
         });

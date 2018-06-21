@@ -13,3 +13,4 @@
     //define("SQL_PASS", "bitroffs");
     //define("SQL_DB", "s255320");
     //define("TIMEOUT", 2); // Time out in minutes for Cookie
+    //define("MAX_ATTEMPT", 3);
