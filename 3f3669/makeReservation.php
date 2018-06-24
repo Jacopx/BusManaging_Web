@@ -31,6 +31,37 @@
             die();
         }
 
+        try {
+            $stmt = $mysqli->prepare("SELECT COUNT(*) FROM Users WHERE user=?;");
+            $stmt->bind_param("s", $user);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result == NULL || $result === FALSE) {
+                throw new Exception("User not found in DB!");
+            }
+
+            if($result->num_rows === 0) {
+                $type = -2;
+                $data = "Cookie error, user not found!";
+                goto end;
+            }
+
+            while($row = $result->fetch_assoc()) {
+                if ($row["COUNT(*)"] != 1) {
+                    $type = -1;
+                    $data = "User not found in DB!";
+                    $mysqli->rollback();
+                    goto end;
+                }
+            }
+        } catch (Exception $e) {
+            $type = -1;
+            $data = "User not found in DB!";
+            $mysqli->rollback();
+            goto end;
+        }
+
         $mysqli->autocommit(FALSE);
         $mysqli->begin_transaction();
 

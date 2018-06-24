@@ -209,9 +209,10 @@ function makeReservation() {
                     if (JSON.parse(returnedData).t === 1) {
                         showReservation();
                     } else {
-                        alert("Reservation not possible!");
+                        alert(JSON.parse(returnedData).d);
                         showReservation();
                     }
+
                 });
         } else {
             alert("STARTING place must precede ENDING!");
