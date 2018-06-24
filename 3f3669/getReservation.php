@@ -15,7 +15,8 @@
     }
 
     function getReservation($logged) {
-        $type = -1; $stops = array();
+
+        $type = -1; $stops = array(); $autocomplete = "";
 
         try {
             $mysqli = new mysqli(SQL_HOST, SQL_USER, SQL_PASS, SQL_DB);
@@ -147,9 +148,13 @@
 
         $data = $data . "</table>";
 
+        foreach($stops as $key => $value) {
+            $autocomplete = $autocomplete .  "<option value=" . $value . ">";
+        }
+
         end:
         $stmt->close();
         $mysqli->close();
-        echo json_encode(array("t" => $type, "d" => $data));
+        echo json_encode(array("t" => $type, "d" => $data, "s" => $autocomplete));
         die();
     }

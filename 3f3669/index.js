@@ -185,7 +185,7 @@ function makeReservation() {
     var end = document.getElementById("end").value;
     var num = document.getElementById("number").value;
 
-    if (!(userLogged === "" || start === "" || end === "" || num === "")) {
+    if (!(userLogged === "" && start === "" && end === "" && num === "")) {
         if (start < end) {
             $.post('makeReservation.php', { field1: userLogged, field2: start, field3: end, field4: num},
                 function(returnedData){
@@ -219,6 +219,8 @@ function showReservation() {
             if (JSON.parse(returnedData).t === 1) {
                 document.getElementById("signup_form").style.visibility = 'collapse';
                 document.getElementById("reservation-table").innerHTML = JSON.parse(returnedData).d;
+                document.getElementById("startList").innerHTML = JSON.parse(returnedData).s;
+                document.getElementById("endList").innerHTML = JSON.parse(returnedData).s;
                 document.getElementById("reservation-table").style.visibility = 'visible';
             } else {
                 console.log(JSON.parse(returnedData).d);
