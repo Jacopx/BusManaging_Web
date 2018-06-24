@@ -72,9 +72,9 @@ function verifyCookie(user, hash) {
                 showLogged();
                 showReservation();
             } else {
-                alert(JSON.parse(returnedData).d);
                 logout();
                 showReservation();
+                alert(JSON.parse(returnedData).d);
             }
         });
 }
@@ -209,14 +209,14 @@ function makeReservation() {
                     if (JSON.parse(returnedData).t === 1) {
                         showReservation();
                     } else {
-                        alert(JSON.parse(returnedData).d);
                         showReservation();
+                        alert(JSON.parse(returnedData).d);
                     }
 
                 });
         } else {
-            alert("STARTING place must precede ENDING!");
             showReservation();
+            alert("STARTING place must precede ENDING!");
         }
     }
 }
@@ -270,8 +270,8 @@ function deleteReservation() {
             if (JSON.parse(returnedData).t === 1) {
                 showReservation();
             } else {
-                alert(JSON.parse(returnedData).d);
                 showReservation();
+                alert(JSON.parse(returnedData).d);
             }
         });
 }

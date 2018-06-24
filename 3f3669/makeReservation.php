@@ -38,12 +38,12 @@
             $result = $stmt->get_result();
 
             if ($result == NULL || $result === FALSE) {
-                throw new Exception("User not found in DB!");
+                throw new Exception("Unable to check that user exist!");
             }
 
             if($result->num_rows === 0) {
                 $type = -2;
-                $data = "Cookie error, user not found!";
+                $data = "User verify failed!";
                 goto end;
             }
 
@@ -55,9 +55,33 @@
                     goto end;
                 }
             }
+
+            $stmt = $mysqli->prepare("SELECT COUNT(*) FROM Reservations WHERE user=?;");
+            $stmt->bind_param("s", $user);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result == NULL || $result === FALSE) {
+                throw new Exception("Unable to verify reservation!");
+            }
+
+            if($result->num_rows === 0) {
+                $type = -2;
+                $data = "Reservation verify failed!";
+                goto end;
+            }
+
+            while($row = $result->fetch_assoc()) {
+                if ($row["COUNT(*)"] == 1) {
+                    $type = -1;
+                    $data = "Delete reservation before make a new one!";
+                    $mysqli->rollback();
+                    goto end;
+                }
+            }
         } catch (Exception $e) {
             $type = -1;
-            $data = "User not found in DB!";
+            $data = $e->getMessage();
             $mysqli->rollback();
             goto end;
         }
