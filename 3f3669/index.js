@@ -4,6 +4,8 @@ function checkCookie() {
         location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
     }
 
+    useCookie();
+
     var cookieUser = getCookie("polixbus_user");
     var cookieHash = getCookie("polixbus_hash");
 
@@ -12,6 +14,19 @@ function checkCookie() {
     } else {
         showLogin();
     }
+}
+
+function useCookie() {
+    var cookieEnabled = navigator.cookieEnabled;
+    if (!cookieEnabled){
+        document.cookie = "testcookie";
+        cookieEnabled = document.cookie.indexOf("testcookie")!=-1;
+    }
+    return cookieEnabled || showCookieFail();
+}
+
+function showCookieFail(){
+    window.location.href = 'error.html';
 }
 
 function getCookie(cname) {
