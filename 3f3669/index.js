@@ -194,7 +194,7 @@ function makeReservation() {
     //@TODO: Check if the user has already performed a reservation
 
     updateCookie();
-    document.getElementById("reservation-table").innerHTML = "";
+    // document.getElementById("reservation-table").innerHTML = "";
     document.getElementById("reservation-table").style.visibility = 'visible';
 
     var userLogged = getCookie("polixbus_user");
@@ -211,7 +211,6 @@ function makeReservation() {
                     if (JSON.parse(returnedData).t === 1) {
                         showReservation();
                     } else {
-                        showReservation();
                         alert(JSON.parse(returnedData).d);
                     }
 
@@ -226,7 +225,7 @@ function makeReservation() {
 function showReservation() {
 
     updateCookie();
-    document.getElementById("reservation-table").innerHTML = "";
+    // document.getElementById("reservation-table").innerHTML = "";
     document.getElementById("reservation-table").style.visibility = 'visible';
 
     var userLogged = getCookie("polixbus_user");
@@ -261,7 +260,7 @@ function showReservation() {
 function deleteReservation() {
 
     updateCookie();
-    document.getElementById("reservation-table").innerHTML = "";
+    // document.getElementById("reservation-table").innerHTML = "";
     document.getElementById("reservation-table").style.visibility = 'visible';
 
     var userLogged = getCookie("polixbus_user");
@@ -272,7 +271,6 @@ function deleteReservation() {
             if (JSON.parse(returnedData).t === 1) {
                 showReservation();
             } else {
-                showReservation();
                 alert(JSON.parse(returnedData).d);
             }
         });
