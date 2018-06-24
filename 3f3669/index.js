@@ -80,19 +80,21 @@ function verifyCookie(user, hash) {
 }
 
 function showLogin() {
-    document.getElementById("login").style.visibility = 'visible';     // Show
-    document.getElementById("logged").style.visibility = 'collapse';      // Hide
+    document.getElementById("login").style.visibility = 'visible';
+    document.getElementById("logged").style.visibility = 'collapse';
 }
 
 function showLogged() {
-    document.getElementById("logged").style.visibility = 'visible';     // Show
-    document.getElementById("login").style.visibility = 'collapse';      // Hide
+    document.getElementById("logged").style.visibility = 'visible';
+    document.getElementById("login").style.visibility = 'collapse';
+    document.getElementById("signup_option").style.visibility = 'collapse';
 }
 
 function showSignup() {
-    document.getElementById("login").style.visibility = 'collapse';      // Hide
-    document.getElementById("logged").style.visibility = 'collapse';      // Hide
-    document.getElementById("reservation-table").style.visibility = 'collapse';      // Hide
+    document.getElementById("login").style.visibility = 'collapse';
+    document.getElementById("logged").style.visibility = 'collapse';
+    document.getElementById("reservation-table").style.visibility = 'collapse';
+    document.getElementById("signup_option").style.visibility = 'visible';
 
     document.getElementById("signup_form").style.visibility = 'visible';
 }
