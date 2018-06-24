@@ -38,9 +38,7 @@
             }
 
             if($result->num_rows === 0) {
-                $type = -2;
-                $data = "Cookie error, user not found!";
-                goto end;
+                throw new Exception("Cookie error, user not found!");
             }
 
             while($row = $result->fetch_assoc()) {
@@ -48,8 +46,7 @@
                     $type = 1;
                     $data = "Welcome, " . $user . "<br>";
                 } else {
-                    $type = 1;
-                    $data = "Cookie error, password not match";
+                    throw new Exception("Cookie error, password not match!");
                 }
             }
         } catch (Exception $e) {

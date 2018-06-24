@@ -38,9 +38,7 @@
             }
 
             if($result->num_rows === 0) {
-                $type = -2;
-                $data = "User not found!";
-                goto end;
+                throw new Exception("User not found!");
             }
 
             while($row = $result->fetch_assoc()) {
@@ -60,10 +58,7 @@
                     break;
 
                 } else {
-                    // FAIL - WRONG PASSWORD
-                    $type = -1;
-                    $data = "Wrong password!";
-                    goto end;
+                    throw new Exception("Wrong password!");
                 }
             }
 

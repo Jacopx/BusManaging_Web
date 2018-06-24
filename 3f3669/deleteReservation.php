@@ -34,11 +34,13 @@
             $stmt->execute();
 
             if ($stmt->affected_rows === 0) {
-                throw new Exception("Impossible delete reservation!");
+                throw new Exception("No reservation to be deleted!");
+            } else if($stmt->affected_rows === 1){
+                $type = 1;
+                $data = "Delete correctly performed!";
+            } else {
+                throw new Exception("Delete not possible!");
             }
-
-            $type = 1;
-            $data = "Delete correctly performed!";
 
         } catch (Exception $e) {
             $type = -1;

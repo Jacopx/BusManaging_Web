@@ -47,11 +47,7 @@
             }
 
             if($result->num_rows > 0) {
-
-                $type = -1;
-                $data = "User already registered!";
-                goto end;
-
+                throw new Exception("User already registered!");
             }
 
             $hash = password_hash($pass, PASSWORD_DEFAULT);
@@ -62,12 +58,11 @@
 
             if ($stmt->affected_rows === 0) {
                 throw new Exception("Registration impossible");
+            } else {
+                // SUCCESS
+                $type = 1;
+                $data = "Signup successful";
             }
-
-            // SUCCESS
-            $type = 1;
-            $data = "Signup successful";
-
         } catch (Exception $e) {
             $type = -1;
             $data = $e->getMessage();

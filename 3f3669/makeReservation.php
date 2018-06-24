@@ -42,17 +42,12 @@
             }
 
             if($result->num_rows === 0) {
-                $type = -2;
-                $data = "User verify failed!";
-                goto end;
+                throw new Exception("User verify failed!");
             }
 
             while($row = $result->fetch_assoc()) {
                 if ($row["COUNT(*)"] != 1) {
-                    $type = -1;
-                    $data = "User not found in DB!";
-                    $mysqli->rollback();
-                    goto end;
+                    throw new Exception("User not found in DB!");
                 }
             }
 
@@ -66,17 +61,12 @@
             }
 
             if($result->num_rows === 0) {
-                $type = -2;
-                $data = "Reservation verify failed!";
-                goto end;
+                throw new Exception("Reservation verify failed!");
             }
 
             while($row = $result->fetch_assoc()) {
                 if ($row["COUNT(*)"] == 1) {
-                    $type = -1;
-                    $data = "Delete reservation before make a new one!";
-                    $mysqli->rollback();
-                    goto end;
+                    throw new Exception("Delete reservation before make a new one!");
                 }
             }
         } catch (Exception $e) {
@@ -104,9 +94,7 @@
             }
 
             if($result->num_rows <= 0) {
-                $type = 0;
-                $data = "Impossible getting stops";
-                goto end;
+                throw new Exception("Impossible getting stops");
             }
 
             while($row = $result->fetch_assoc()) {
@@ -142,9 +130,7 @@
             }
 
             if($result->num_rows <= 0) {
-                $type = 0;
-                $data = "Impossible getting stops";
-                goto end;
+                throw new Exception("Impossible getting stops!");
             }
 
             while($row = $result->fetch_assoc()) {
@@ -183,12 +169,12 @@
 
                 if ($stmt->affected_rows === 0) {
                     throw new Exception("Insert not possible");
+                } else {
+                    $type = 1;
+                    $data = "Reservation added";
+                    $mysqli->commit();
+                    goto end;
                 }
-
-                $type = 1;
-                $data = "Reservation added";
-                $mysqli->commit();
-                goto end;
 
             } catch (Exception $e) {
 

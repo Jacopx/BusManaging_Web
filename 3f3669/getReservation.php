@@ -39,9 +39,7 @@
             }
 
             if($result->num_rows <= 0) {
-                $type = 0;
-                $data = "Impossible getting stops";
-                goto end;
+                throw new Exception("Impossible getting stops");
             }
 
             while($row = $result->fetch_assoc()) {
