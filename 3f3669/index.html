@@ -29,8 +29,8 @@
                       <td>Password</td>
                   </tr>
                   <tr>
-                      <td><input class="inputtext" name="user" id="user" type="email" required></td>
-                      <td><input class="inputtext" name="pass" id="pass" type="password" title="one lowercase char and, at least one uppercase or a number" required></td>
+                      <td><input class="inputtext" name="user" id="user" type="email" placeholder="email" required></td>
+                      <td><input class="inputtext" name="pass" id="pass" type="password" title="one lowercase char and, at least one uppercase or a number" placeholder="password" required></td>
                       <td><button type="submit" onclick="login()">Log In</button></td>
                   </tr>
               </table>
@@ -66,9 +66,9 @@
               <tr>
                   <!--<td><input class="inputtext" name="start" id="start" required></td>-->
                   <!--<td><input class="inputtext" name="end" id="end" required></td>-->
-                  <td><input id="start" list="startList"><datalist id="startList"></datalist></td>
-                  <td><input id="end" list="endList"><datalist id="endList"></datalist></td>
-                  <td><input class="inputtext" name="number" id="number" required></td>
+                  <td><input id="start" list="startList" placeholder="Starting stop"><datalist id="startList"></datalist></td>
+                  <td><input id="end" list="endList" placeholder="Ending stop"><datalist id="endList"></datalist></td>
+                  <td><input class="inputtext" name="number" id="number" placeholder="# of seats to reserve" required></td>
               </tr>
           </table>
           <button type="submit" onclick="makeReservation();" id="make-reser">Make Reservation</button>

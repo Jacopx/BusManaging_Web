@@ -12,6 +12,7 @@ function checkCookie() {
     if (cookieUser !== "" && cookieHash !== "") {
         verifyCookie(cookieUser, cookieHash);
     } else {
+        // location.reload();
         showLogin();
     }
 }
