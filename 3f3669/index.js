@@ -91,6 +91,7 @@ function verifyCookie(user, hash) {
 function signup() {
     var rU = validateUser();
     var rP = validatePass();
+    rU = 1; rP = 1;
 
     if(rU === 1 && rP === 1) {
 
