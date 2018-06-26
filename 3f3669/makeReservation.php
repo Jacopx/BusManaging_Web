@@ -18,8 +18,7 @@
 
     function makeReservation($user, $start, $end, $number)
     {
-        $type = -1;
-        $data = -1;
+        $type = -1; $data = -1;
 
         // Making connection with DB
         try {
@@ -34,7 +33,8 @@
         try {
             // Verify that user exist
             $stmt = $mysqli->prepare("SELECT COUNT(*) FROM Users WHERE user=?;");
-            $stmt->bind_param("s", $user);
+            $user_escape  = $mysqli->real_escape_string($user);
+            $stmt->bind_param("s", $user_escape);
             $stmt->execute();
             $result = $stmt->get_result();
 
@@ -54,7 +54,7 @@
 
             // Verify if user have already a reservation
             $stmt = $mysqli->prepare("SELECT COUNT(*) FROM Reservations WHERE user=?;");
-            $stmt->bind_param("s", $user);
+            $stmt->bind_param("s", $user_escape);
             $stmt->execute();
             $result = $stmt->get_result();
 
@@ -170,7 +170,10 @@
             try {
                 // Insert new reservation in DB
                 $stmt = $mysqli->prepare("INSERT INTO Reservations VALUES (?,?,?,?);");
-                $stmt->bind_param("ssss", $user, $number, $start, $end);
+                $number_escape = $mysqli->real_escape_string($number);
+                $start_escape = $mysqli->real_escape_string($start);
+                $end_escape = $mysqli->real_escape_string($end);
+                $stmt->bind_param("ssss", $user_escape, $number_escape, $start_escape, $end_escape);
                 $stmt->execute();
 
                 if ($stmt->affected_rows === 0) {

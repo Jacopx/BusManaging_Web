@@ -30,7 +30,8 @@
         try {
             // Get user informations
             $stmt = $mysqli->prepare("SELECT * FROM Users WHERE user=?");
-            $stmt->bind_param("s", $user);
+            $user_escape  = $mysqli->real_escape_string($user);
+            $stmt->bind_param("s", $user_escape);
             $stmt->execute();
             $result = $stmt->get_result();
 

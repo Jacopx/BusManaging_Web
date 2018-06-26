@@ -32,7 +32,8 @@
         try {
             // Delete reservation linked to the user
             $stmt = $mysqli->prepare("DELETE FROM Reservations WHERE user=?");
-            $stmt->bind_param("s", $logged);
+            $user_escape  = $mysqli->real_escape_string($logged);
+            $stmt->bind_param("s", $user_escape);
             $stmt->execute();
 
             if ($stmt->affected_rows === 0) {

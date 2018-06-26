@@ -43,12 +43,12 @@
 
   <div class="navbar">
       <a onclick="showReservation();">Bus stops</a>
-      <!--<a onclick="showInfo();">Info</a>-->
       <a onclick="logout();">Logout</a>
       <a></a>
       <a></a>
       <a></a>
       <a onclick="showSignup();" id="signup_option">Sign Up</a>
+      <a onclick="window.open('https://github.com/Jacopx/BusManaging_WebPlatform');">Info</a>
   </div>
 
   <div class="main" id="main">
@@ -64,8 +64,6 @@
                   <th>Passengers</th>
               </tr>
               <tr>
-                  <!--<td><input class="inputtext" name="start" id="start" required></td>-->
-                  <!--<td><input class="inputtext" name="end" id="end" required></td>-->
                   <td><input id="start" list="startList" placeholder="Starting stop"><datalist id="startList"></datalist></td>
                   <td><input id="end" list="endList" placeholder="Ending stop"><datalist id="endList"></datalist></td>
                   <td><input class="inputtext" name="number" id="number" placeholder="# of seats to reserve" required></td>
@@ -94,11 +92,6 @@
               </div>
           </div>
       </div>
-      <!--<div id="dev-info">-->
-          <!--<h4>Website developed by:-->
-          <!--<a href="https://github.com/Jacopx">Jacopx</a>-->
-          <!--</h4>-->
-      <!--</div>-->
   </div>
 
   <noscript>
