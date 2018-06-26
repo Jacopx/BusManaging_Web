@@ -16,8 +16,7 @@
 
     function deleteReservation($logged)
     {
-        $type = -1;
-        $data = -1;
+        $type = -1; $data = -1;
 
         // Making connection with DB
         try {
