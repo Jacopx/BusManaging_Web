@@ -19,6 +19,7 @@
         $type = -1;
         $data = -1;
 
+        // Making connection with DB
         try {
             $mysqli = new mysqli(SQL_HOST, SQL_USER, SQL_PASS, SQL_DB);
         } catch (Exception $e) {
@@ -28,14 +29,16 @@
             die();
         }
 
-        $stmt = $mysqli->prepare("DELETE FROM Reservations WHERE user=?");
         try {
+            // Delete reservation linked to the user
+            $stmt = $mysqli->prepare("DELETE FROM Reservations WHERE user=?");
             $stmt->bind_param("s", $logged);
             $stmt->execute();
 
             if ($stmt->affected_rows === 0) {
                 throw new Exception("No reservation to be deleted!");
             } else if($stmt->affected_rows === 1){
+                // SUCCESS
                 $type = 1;
                 $data = "Delete correctly performed!";
             } else {
@@ -49,7 +52,6 @@
         }
 
         end:
-        $stmt->close();
         $mysqli->close();
         echo json_encode(array("t" => $type, "d" => $data));
         die();

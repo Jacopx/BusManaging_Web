@@ -27,6 +27,7 @@
 //            die();
 //        }
 
+        // Making connection with DB
         try {
             $mysqli = new mysqli(SQL_HOST, SQL_USER, SQL_PASS, SQL_DB);
         } catch(Exception $e) {
@@ -36,8 +37,9 @@
             die();
         }
 
-        $stmt = $mysqli->prepare("SELECT * FROM Users WHERE user=?");
         try {
+            // Verify that user not already exist
+            $stmt = $mysqli->prepare("SELECT * FROM Users WHERE user=?");
             $stmt->bind_param("s", $user);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -52,6 +54,7 @@
 
             $hash = password_hash($pass, PASSWORD_DEFAULT);
 
+            // Insert the new user
             $stmt = $mysqli->prepare("INSERT INTO Users VALUES (?,?)");
             $stmt->bind_param("ss", $user, $hash);
             $stmt->execute();
@@ -69,8 +72,8 @@
             goto end;
         }
 
+        // ENDING
         end:
-        $stmt->close();
         $mysqli->close();
         echo json_encode(array("t" => $type, "d" => $data));
         die();

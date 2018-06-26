@@ -18,10 +18,10 @@
 
     function makeReservation($user, $start, $end, $number)
     {
-        //@TODO: Verify that user exist
         $type = -1;
         $data = -1;
 
+        // Making connection with DB
         try {
             $mysqli = new mysqli(SQL_HOST, SQL_USER, SQL_PASS, SQL_DB);
         } catch (Exception $e) {
@@ -32,6 +32,7 @@
         }
 
         try {
+            // Verify that user exist
             $stmt = $mysqli->prepare("SELECT COUNT(*) FROM Users WHERE user=?;");
             $stmt->bind_param("s", $user);
             $stmt->execute();
@@ -51,6 +52,7 @@
                 }
             }
 
+            // Verify if user have already a reservation
             $stmt = $mysqli->prepare("SELECT COUNT(*) FROM Reservations WHERE user=?;");
             $stmt->bind_param("s", $user);
             $stmt->execute();
@@ -76,16 +78,19 @@
             goto end;
         }
 
+        // Start transaction
         $mysqli->autocommit(FALSE);
         $mysqli->begin_transaction();
 
         $stops = array();
         $attempt = 1;
 
-        $stmt = $mysqli->prepare("SELECT * FROM Reservations ORDER BY start, end FOR UPDATE;");
+
 
         retry:
         try {
+            // Getting stops
+            $stmt = $mysqli->prepare("SELECT * FROM Reservations ORDER BY start, end FOR UPDATE;");
             $stmt->execute();
             $result = $stmt->get_result();
 
@@ -118,10 +123,12 @@
                 }
             }
 
+            // Ensure that stops are sorted, not require, but preferred
             sort($stops);
             // Array_fill in order to allow empty segements
             $passNumber = array_fill(0, (count($stops) - 1), 0);
 
+            // Re-executed statement for stops
             $stmt->execute();
             $result = $stmt->get_result();
 
@@ -159,17 +166,17 @@
 
         }
 
-        $stmt = $mysqli->prepare("INSERT INTO Reservations VALUES (?,?,?,?);");
-
         if (max($passNumber) + $number <= BUS_SIZE) {
             try {
-
+                // Insert new reservation in DB
+                $stmt = $mysqli->prepare("INSERT INTO Reservations VALUES (?,?,?,?);");
                 $stmt->bind_param("ssss", $user, $number, $start, $end);
                 $stmt->execute();
 
                 if ($stmt->affected_rows === 0) {
                     throw new Exception("Insert not possible");
                 } else {
+                    // SUCCESS
                     $type = 1;
                     $data = "Reservation added";
                     $mysqli->commit();
@@ -191,8 +198,8 @@
             goto end;
         }
 
+        // ENDING
         end:
-        $stmt->close();
         $mysqli->close();
         echo json_encode(array("t" => $type, "d" => $data));
         die();

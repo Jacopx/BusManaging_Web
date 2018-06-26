@@ -99,6 +99,20 @@ function showSignup() {
     document.getElementById("signup_form").style.visibility = 'visible';
 }
 
+function showReservationStuff(type) {
+
+    if (type === 1) {
+        document.getElementById("delete-reser").style.visibility = 'visible';
+        document.getElementById("make-reser").style.visibility = 'visible';
+        document.getElementById("reservation-request").style.visibility = 'visible';
+    } else {
+        document.getElementById("delete-reser").style.visibility = 'collapse';
+        document.getElementById("make-reser").style.visibility = 'collapse';
+        document.getElementById("reservation-request").style.visibility = 'collapse';
+    }
+
+}
+
 function signup() {
     // @TODO: Logout before signup
     var rU = validateUser();
@@ -245,16 +259,12 @@ function showReservation() {
             }
         });
 
-    // @TODO: Shift hide/visual in a function
-    if (userLogged != "") {
-        document.getElementById("delete-reser").style.visibility = 'visible';
-        document.getElementById("make-reser").style.visibility = 'visible';
-        document.getElementById("reservation-request").style.visibility = 'visible';
+    if (userLogged !== "") {
+        showReservationStuff(1);
     } else {
-        document.getElementById("delete-reser").style.visibility = 'collapse';
-        document.getElementById("make-reser").style.visibility = 'collapse';
-        document.getElementById("reservation-request").style.visibility = 'collapse';
+        showReservationStuff(0);
     }
+
 }
 
 function deleteReservation() {

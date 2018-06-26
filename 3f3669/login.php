@@ -17,6 +17,7 @@
     function login($user, $pass) {
         $type = -3; $data = -3;
 
+        // Making connection with DB
         try {
             $mysqli = new mysqli(SQL_HOST, SQL_USER, SQL_PASS, SQL_DB);
         } catch(Exception $e) {
@@ -26,9 +27,9 @@
             die();
         }
 
-        $stmt = $mysqli->prepare("SELECT * FROM Users WHERE user=?");
         try {
-
+            // Get user informations
+            $stmt = $mysqli->prepare("SELECT * FROM Users WHERE user=?");
             $stmt->bind_param("s", $user);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -71,7 +72,6 @@
 
 
         end:
-        $stmt->close();
         $mysqli->close();
         echo json_encode(array("t" => $type, "d" => $data));
         die();

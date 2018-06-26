@@ -26,9 +26,9 @@
             die();
         }
 
-        $stmt = $mysqli->prepare("SELECT * FROM Users WHERE user=?");
-
         try {
+            // Get user data
+            $stmt = $mysqli->prepare("SELECT * FROM Users WHERE user=?");
             $stmt->bind_param("s", $user);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -43,6 +43,7 @@
 
             while($row = $result->fetch_assoc()) {
                 if ($hash == $row["pass"]) {
+                    // SUCCESS
                     $type = 1;
                     $data = "Welcome, " . $user . "<br>";
                 } else {
@@ -55,8 +56,8 @@
             goto end;
         }
 
+        // ENDING
         end:
-        $stmt->close();
         $mysqli->close();
         echo json_encode(array("t" => $type, "d" => $data));
         die();

@@ -18,6 +18,7 @@
 
         $type = -1; $stops = array(); $autocomplete = "";
 
+        // Making connection with DB
         try {
             $mysqli = new mysqli(SQL_HOST, SQL_USER, SQL_PASS, SQL_DB);
         } catch(Exception $e) {
@@ -27,10 +28,14 @@
             die();
         }
 
-        $stmt = $mysqli->prepare("SELECT * FROM Reservations ORDER BY start, end;");
-
         try {
+            // Start transaction
+            $mysqli->autocommit(FALSE);
+            $mysqli->begin_transaction();
 
+            // Getting all reservations
+            // Also this query use FOR UPDATE because it repeat 2 times the same query and it must be consistent
+            $stmt = $mysqli->prepare("SELECT * FROM Reservations ORDER BY start, end FOR UPDATE;");
             $stmt->execute();
             $result = $stmt->get_result();
 
@@ -65,9 +70,11 @@
                 }
             }
 
+            // Ensure sorted stops
             sort($stops);
             $segments = array();
 
+            // Visualization with segments
             for ($i = 0; $i < (count($stops) - 1); $i++) {
                 array_push($segments, $stops[$i] . " --> " . $stops[($i + 1)]);
             }
@@ -78,7 +85,7 @@
             $startPoint = -1;
             $endPoint = -1;
 
-
+            // Re-execute query in for getting stops
             $stmt->execute();
             $result2 = $stmt->get_result();
 
@@ -112,9 +119,12 @@
                 }
             }
 
+            $mysqli->commit();
+
         } catch (Exception $e) {
             $type = 0;
             $data = $e->getMessage();
+            $mysqli->rollback();
             goto end;
         }
 
@@ -151,7 +161,6 @@
         }
 
         end:
-        $stmt->close();
         $mysqli->close();
         echo json_encode(array("t" => $type, "d" => $data, "s" => $autocomplete));
         die();
