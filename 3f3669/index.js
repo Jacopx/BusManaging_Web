@@ -1,3 +1,5 @@
+// BASE FUNCTIONS
+// All time the page is refreshed this function is used. Verify HTTPS and Cookies
 function checkCookie() {
     // ENFORCE HTTPS
     if (location.protocol != 'https:') {
@@ -12,11 +14,11 @@ function checkCookie() {
     if (cookieUser !== "" && cookieHash !== "") {
         verifyCookie(cookieUser, cookieHash);
     } else {
-        // location.reload();
         showLogin();
     }
 }
 
+// Verify if cookie can be used
 function useCookie() {
     var cookieEnabled = navigator.cookieEnabled;
     if (!cookieEnabled){
@@ -26,10 +28,12 @@ function useCookie() {
     return cookieEnabled || showCookieFail();
 }
 
+// Passing to ERROR PAGE when cookie are not usable
 function showCookieFail(){
     window.location.href = 'error.html';
 }
 
+// Get the cookie with the name provided as argument
 function getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
@@ -46,6 +50,7 @@ function getCookie(cname) {
     return "";
 }
 
+// Update the expire date to the next TIMEOUT minute
 function updateCookie() {
     var cookieUser = getCookie("polixbus_user");
     var cookieHash = getCookie("polixbus_hash");
@@ -65,6 +70,7 @@ function updateCookie() {
 
 }
 
+// Verify that cookie is correctly assembled with the password hashed
 function verifyCookie(user, hash) {
     $.post('checkUser.php', { field1: user, field2 : hash},
         function(returnedData){
@@ -80,42 +86,9 @@ function verifyCookie(user, hash) {
         });
 }
 
-function showLogin() {
-    document.getElementById("login").style.visibility = 'visible';
-    document.getElementById("logged").style.visibility = 'collapse';
-}
-
-function showLogged() {
-    document.getElementById("logged").style.visibility = 'visible';
-    document.getElementById("login").style.visibility = 'collapse';
-    document.getElementById("signup_option").style.visibility = 'collapse';
-}
-
-function showSignup() {
-    document.getElementById("login").style.visibility = 'collapse';
-    document.getElementById("logged").style.visibility = 'collapse';
-    document.getElementById("reservation-table").style.visibility = 'collapse';
-    document.getElementById("signup_option").style.visibility = 'visible';
-
-    document.getElementById("signup_form").style.visibility = 'visible';
-}
-
-function showReservationStuff(type) {
-
-    if (type === 1) {
-        document.getElementById("delete-reser").style.visibility = 'visible';
-        document.getElementById("make-reser").style.visibility = 'visible';
-        document.getElementById("reservation-request").style.visibility = 'visible';
-    } else {
-        document.getElementById("delete-reser").style.visibility = 'collapse';
-        document.getElementById("make-reser").style.visibility = 'collapse';
-        document.getElementById("reservation-request").style.visibility = 'collapse';
-    }
-
-}
-
+// USER MANAGE FUNCTIONS
+// Signup new user, password/user validation is performed 3 times (HTML5, JS and PHP)
 function signup() {
-    // @TODO: Logout before signup
     var rU = validateUser();
     var rP = validatePass();
 
@@ -138,9 +111,8 @@ function signup() {
     }
 }
 
+// Login user and cookies save from server-side
 function login() {
-    // @TODO: Hide signup after login
-    // @TODO: Fix uncorrect positioning of table
     var user = document.getElementById("user").value.toLowerCase();
     var pass = document.getElementById("pass").value;
 
@@ -155,13 +127,14 @@ function login() {
         });
 }
 
+// Logout, set expire time to
 function logout() {
     document.cookie = "polixbus_user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "polixbus_hash=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     location.reload();
-    // @TODO: Hide reservation div
 }
 
+// Password validation JS side
 function validatePass() {
     var pass = document.getElementById("signup_pass");
     var repeatpass = document.getElementById("signup_pass-repeat");
@@ -188,8 +161,11 @@ function validatePass() {
     return returnValue;
 }
 
+// Mail validation JS side
 function validateUser() {
     var user = document.getElementById("signup_user");
+
+    // REGEX from W3SCHOOL
     const regexMail = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
     var returnValue = -1;
@@ -198,18 +174,17 @@ function validateUser() {
         user.style.border = "";
         returnValue = 1;
     } else {
-        // user.style.border = "2px solid red";
         returnValue = 0;
     }
 
     return returnValue;
 }
 
+// RESERVATION MANAGING FUNCTIONS
+// Making a new reservation, used on button click
 function makeReservation() {
-    //@TODO: Check if the user has already performed a reservation
 
     updateCookie();
-    // document.getElementById("reservation-table").innerHTML = "";
     document.getElementById("reservation-table").style.visibility = 'visible';
 
     var userLogged = getCookie("polixbus_user");
@@ -217,6 +192,7 @@ function makeReservation() {
     var end = document.getElementById("end").value;
     var num = document.getElementById("number").value;
 
+    // Verify that all field are not empty
     if (!(userLogged === "" && start === "" && end === "" && num === "")) {
         if (start < end) {
             $.post('makeReservation.php', { field1: userLogged, field2: start, field3: end, field4: num},
@@ -237,10 +213,10 @@ function makeReservation() {
     }
 }
 
+// Show reservations, different layout in case of logged or not
 function showReservation() {
 
     updateCookie();
-    // document.getElementById("reservation-table").innerHTML = "";
     document.getElementById("reservation-table").style.visibility = 'visible';
 
     var userLogged = getCookie("polixbus_user");
@@ -268,10 +244,10 @@ function showReservation() {
 
 }
 
+// Delete reservation, verification of user possibility to make reservation or not is server-side performed
 function deleteReservation() {
 
     updateCookie();
-    // document.getElementById("reservation-table").innerHTML = "";
     document.getElementById("reservation-table").style.visibility = 'visible';
 
     var userLogged = getCookie("polixbus_user");
@@ -285,4 +261,42 @@ function deleteReservation() {
                 alert(JSON.parse(returnedData).d);
             }
         });
+}
+
+// LAYOUT FUNCTIONS
+// Showing login stuffs
+function showLogin() {
+    document.getElementById("login").style.visibility = 'visible';
+    document.getElementById("logged").style.visibility = 'collapse';
+}
+
+// Showing logged stuffs
+function showLogged() {
+    document.getElementById("logged").style.visibility = 'visible';
+    document.getElementById("login").style.visibility = 'collapse';
+    document.getElementById("signup_option").style.visibility = 'collapse';
+}
+
+// Showing signup stuffs
+function showSignup() {
+    document.getElementById("login").style.visibility = 'collapse';
+    document.getElementById("logged").style.visibility = 'collapse';
+    document.getElementById("reservation-table").style.visibility = 'collapse';
+    document.getElementById("signup_option").style.visibility = 'visible';
+    document.getElementById("signup_form").style.visibility = 'visible';
+}
+
+// Show/hide reservation stuffs
+function showReservationStuff(type) {
+
+    if (type === 1) {
+        document.getElementById("delete-reser").style.visibility = 'visible';
+        document.getElementById("make-reser").style.visibility = 'visible';
+        document.getElementById("reservation-request").style.visibility = 'visible';
+    } else {
+        document.getElementById("delete-reser").style.visibility = 'collapse';
+        document.getElementById("make-reser").style.visibility = 'collapse';
+        document.getElementById("reservation-request").style.visibility = 'collapse';
+    }
+
 }
