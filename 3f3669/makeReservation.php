@@ -12,7 +12,9 @@
 
     if(isset($_POST['field1']) && isset($_POST['field2']) && isset($_POST['field3']) && isset($_POST['field4']) && $secure_connection) {
         if ($_POST['field2'] < $_POST['field3']) {
-            makeReservation($_POST['field1'], $_POST['field2'], $_POST['field3'], $_POST['field4']);
+            if ($_POST['field4'] > 0) {
+                makeReservation($_POST['field1'], $_POST['field2'], $_POST['field3'], $_POST['field4']);
+            }
         }
     }
 
@@ -25,7 +27,7 @@
             $mysqli = new mysqli(SQL_HOST, SQL_USER, SQL_PASS, SQL_DB);
         } catch (Exception $e) {
             $type = 0;
-            $data = "Internal error: connection to DB failed ";
+            $data = "Internal error: connection to DB failed";
             echo json_encode(array("t" => $type, "d" => $data));
             die();
         }

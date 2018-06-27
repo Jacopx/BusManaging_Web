@@ -137,9 +137,8 @@
 
         for ($i = 0; $i < count($segments); $i++) {
             if ($logged != "") {
-                if ($startPoint == $i) {
-                    $data = $data . "<tr bgcolor=\"#00ff00\"><td>" . $segments[$i] . "</td><td>" . $passNumber[$i] . "</td><td>" . $rowString[$i] . "</td></tr>";
-                } else if ($i == $endPoint) {
+                if ($startPoint == $i || $endPoint == $i) {
+                    // GREEN #00ff00 - RED #ff6666
                     $data = $data . "<tr bgcolor=\"#ff6666\"><td>" . $segments[$i] . "</td><td>" . $passNumber[$i] . "</td><td>" . $rowString[$i] . "</td></tr>";
                 } else {
                     $data = $data . "<tr><td>" . $segments[$i] . "</td><td>" . $passNumber[$i] . "</td><td>" . $rowString[$i] . "</td></tr>";

@@ -194,23 +194,31 @@ function makeReservation() {
     var num = document.getElementById("number").value;
 
     // Verify that all field are not empty
-    if (!(userLogged === "" && start === "" && end === "" && num === "")) {
+    if (userLogged !== "" && start !== "" && end !== "" && num !== "") {
         if (start < end) {
-            $.post('makeReservation.php', { field1: userLogged, field2: start, field3: end, field4: num},
-                function(returnedData){
-                    console.log(returnedData);
+            if (num > 0) {
+                $.post('makeReservation.php', { field1: userLogged, field2: start, field3: end, field4: num},
+                    function(returnedData){
+                        console.log(returnedData);
 
-                    if (JSON.parse(returnedData).t === 1) {
-                        showReservation();
-                    } else {
-                        alert(JSON.parse(returnedData).d);
-                    }
+                        if (JSON.parse(returnedData).t === 1) {
+                            showReservation();
+                        } else {
+                            alert(JSON.parse(returnedData).d);
+                        }
 
-                });
+                    });
+            } else {
+                showReservation();
+                alert("Number of passengers must be greater or equal to 1!");
+            }
         } else {
             showReservation();
             alert("STARTING place must precede ENDING!");
         }
+    } else {
+        showReservation();
+        alert("Check reservation fields!");
     }
 }
 
