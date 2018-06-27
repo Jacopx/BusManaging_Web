@@ -99,7 +99,7 @@
             }
 
             if($result->num_rows <= 0) {
-                throw new Exception("Impossible getting stops");
+                goto direct_insert;
             }
 
             while($row = $result->fetch_assoc()) {
@@ -167,6 +167,7 @@
         }
 
         if (max($passNumber) + $number <= BUS_SIZE) {
+            direct_insert:
             try {
                 // Insert new reservation in DB
                 $stmt = $mysqli->prepare("INSERT INTO Reservations VALUES (?,?,?,?);");

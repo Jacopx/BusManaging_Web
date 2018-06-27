@@ -44,7 +44,10 @@
             }
 
             if($result->num_rows <= 0) {
-                throw new Exception("Impossible getting stops");
+//                throw new Exception("Impossible getting stops");
+                $type = -2;
+                $data = "No reservations, the bus of " . BUS_SIZE . " seats is empty";
+                goto end;
             }
 
             while($row = $result->fetch_assoc()) {
@@ -94,9 +97,7 @@
             }
 
             if($result2->num_rows <= 0) {
-                $type = 0;
-                $data = "Impossible preparing output";
-                goto end;
+                throw new Exception("Impossible preparing output");
             }
 
             while($row = $result2->fetch_assoc()) {
