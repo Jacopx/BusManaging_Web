@@ -104,6 +104,10 @@
                 goto direct_insert;
             }
 
+            // Simulating new situations to check available seats
+            array_push($stops, $start);
+            array_push($stops, $end);
+
             while($row = $result->fetch_assoc()) {
                 $addS = 1; $addE = 1;
                 foreach($stops as $key => $value) {
