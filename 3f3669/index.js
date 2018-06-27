@@ -270,6 +270,7 @@ function deleteReservation() {
             if (JSON.parse(returnedData).t === 1) {
                 showReservation();
             } else {
+                showReservation();
                 alert(JSON.parse(returnedData).d);
             }
         });
