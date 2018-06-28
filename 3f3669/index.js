@@ -77,7 +77,6 @@ function updateCookie() {
     } else {
         showLogin();
     }
-
 }
 
 // Verify that cookie is correctly assembled with the password hashed
