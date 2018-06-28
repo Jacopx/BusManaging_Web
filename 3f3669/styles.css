@@ -149,3 +149,12 @@ hr {
 #reservation-request {
     visibility: hidden;
 }
+
+#signup_user:valid, #signup_pass:valid, #signup_pass-repeat:valid {
+    /*border: 1px solid green;*/
+    color: green;
+}
+#signup_user:invalid, #signup_pass:invalid, #signup_pass-repeat:invalid {
+    /*border: 1px solid red;*/
+    color: red;
+}

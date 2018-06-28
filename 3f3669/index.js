@@ -155,11 +155,12 @@ function validatePass() {
             repeatpass.style.border = ""
             returnValue = 1;
         } else {
-            repeatpass.style.border = "2px solid red"
+            repeatpass.style.border = "1px solid red"
             returnValue = 0;
         }
 
     } else {
+        pass.style.border = "1px solid red";
         returnValue = 0;
     }
 
