@@ -201,52 +201,57 @@ function validateUser() {
 // Making a new reservation, used on button click
 function makeReservation() {
 
-    updateCookie();
-    document.getElementById("reservation-table").style.visibility = 'visible';
+    if ( getCookie("polixbus_user") === "" || getCookie("polixbus_hash") === "" )  {
+        alert("Session expired!");
+        location.reload();
+    } else {
+        updateCookie();
+        document.getElementById("reservation-table").style.visibility = 'visible';
 
-    var userLogged = getCookie("polixbus_user");
-    var start = document.getElementById("start").value.toLowerCase();
-    var end = document.getElementById("end").value.toLowerCase();
-    var num = document.getElementById("number").value;
+        var userLogged = getCookie("polixbus_user");
+        var start = document.getElementById("start").value.toLowerCase();
+        var end = document.getElementById("end").value.toLowerCase();
+        var num = document.getElementById("number").value;
 
-    const regexAlNum = /^[a-z0-9]+$/i;
+        const regexAlNum = /^[a-z0-9]+$/i;
 
-    // Verify that all field are not empty
-    if (userLogged !== "" && start !== "" && end !== "" && num !== "") {
-        if (start < end) {
-            if (num > 0) {
-                if (regexAlNum.test(start) && regexAlNum.test(end)) {
-                    if (start.length < 254 || end.length < 254) {
-                        $.post('makeReservation.php', { field1: userLogged, field2: start, field3: end, field4: num},
-                            function(returnedData){
-                                console.log(returnedData);
+        // Verify that all field are not empty
+        if (userLogged !== "" && start !== "" && end !== "" && num !== "") {
+            if (start < end) {
+                if (num > 0) {
+                    if (regexAlNum.test(start) && regexAlNum.test(end)) {
+                        if (start.length < 254 || end.length < 254) {
+                            $.post('makeReservation.php', { field1: userLogged, field2: start, field3: end, field4: num},
+                                function(returnedData){
+                                    console.log(returnedData);
 
-                                if (JSON.parse(returnedData).t === 1) {
-                                    showReservation();
-                                } else {
-                                    alert(JSON.parse(returnedData).d);
-                                }
+                                    if (JSON.parse(returnedData).t === 1) {
+                                        showReservation();
+                                    } else {
+                                        alert(JSON.parse(returnedData).d);
+                                    }
 
-                            });
+                                });
+                        } else {
+                            showReservation();
+                            alert("Stop and/or start is longer than 254 chars!");
+                        }
                     } else {
                         showReservation();
-                        alert("Stop and/or start is longer than 254 chars!");
+                        alert("Only letters or number are usable in start and stop!");
                     }
                 } else {
                     showReservation();
-                    alert("Only letters or number are usable in start and stop!");
+                    alert("Number of passengers must be greater or equal to 1!");
                 }
             } else {
                 showReservation();
-                alert("Number of passengers must be greater or equal to 1!");
+                alert("STARTING place must precede ENDING!");
             }
         } else {
             showReservation();
-            alert("STARTING place must precede ENDING!");
+            alert("Check reservation fields!");
         }
-    } else {
-        showReservation();
-        alert("Check reservation fields!");
     }
 }
 
@@ -286,21 +291,26 @@ function showReservation() {
 // Delete reservation, verification of user possibility to make reservation or not is server-side performed
 function deleteReservation() {
 
-    updateCookie();
-    document.getElementById("reservation-table").style.visibility = 'visible';
+    if ( getCookie("polixbus_user") === "" || getCookie("polixbus_hash") === "" )  {
+        alert("Session expired!");
+        location.reload();
+    } else {
+        updateCookie();
+        document.getElementById("reservation-table").style.visibility = 'visible';
 
-    var userLogged = getCookie("polixbus_user");
+        var userLogged = getCookie("polixbus_user");
 
-    $.post('deleteReservation.php', { field1: userLogged},
-        function(returnedData){
-            console.log(returnedData);
-            if (JSON.parse(returnedData).t === 1) {
-                showReservation();
-            } else {
-                showReservation();
-                alert(JSON.parse(returnedData).d);
-            }
-        });
+        $.post('deleteReservation.php', { field1: userLogged},
+            function(returnedData){
+                console.log(returnedData);
+                if (JSON.parse(returnedData).t === 1) {
+                    showReservation();
+                } else {
+                    showReservation();
+                    alert(JSON.parse(returnedData).d);
+                }
+            });
+    }
 }
 
 // LAYOUT FUNCTIONS
