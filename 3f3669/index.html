@@ -67,8 +67,8 @@
                   <th>Passengers</th>
               </tr>
               <tr>
-                  <td><input id="start" list="startList" placeholder="Starting stop"><datalist id="startList"></datalist></td>
-                  <td><input id="end" list="endList" placeholder="Ending stop"><datalist id="endList"></datalist></td>
+                  <td><input id="start" list="startList" placeholder="Starting stop" pattern="[a-zA-Z0-9]+"><datalist id="startList"></datalist></td>
+                  <td><input id="end" list="endList" placeholder="Ending stop" pattern="[a-zA-Z0-9]+"><datalist id="endList"></datalist></td>
                   <td><input class="inputtext" name="number" id="number" placeholder="# of seats to reserve" required></td>
               </tr>
           </table>
