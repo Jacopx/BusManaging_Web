@@ -46,6 +46,17 @@
             while($row = $result->fetch_assoc()) {
                 if (password_verify($pass, $row["pass"])) {
                     // SUCCESS
+                    $hash = getToken(254);
+                    $time = time() + TIMEOUT * 60;
+
+                    $stmt = $mysqli->prepare("UPDATE Users SET token = ?, timestamp = ?  WHERE user = ?");
+                    $stmt->bind_param("sis", $hash, $time, $user_escape);
+                    $stmt->execute();
+
+                    if($stmt->affected_rows === 0) {
+                        throw new Exception("Update not performed!");
+                    }
+
                     $type = 1;
                     $data = 'Password is valid!<br><br>Welcome ' . $user . ' <br>';
 
@@ -54,7 +65,7 @@
                     setcookie($cookie_name, $cookie_value, time() + (TIMEOUT*60), '/');
 
                     $cookie_name = 'polixbus_hash';
-                    $cookie_value = $row["pass"];
+                    $cookie_value = $hash;
                     setcookie($cookie_name, $cookie_value, time() + (TIMEOUT*60), '/');
 
                     break;
@@ -76,4 +87,18 @@
         $mysqli->close();
         echo json_encode(array("t" => $type, "d" => $data));
         die();
+}
+
+function getToken($length){
+    $token = "";
+    $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    $codeAlphabet.= "abcdefghijklmnopqrstuvwxyz";
+    $codeAlphabet.= "0123456789";
+    $max = strlen($codeAlphabet); // edited
+
+    for ($i=0; $i < $length; $i++) {
+        $token .= $codeAlphabet[random_int(0, $max-1)];
+    }
+
+    return $token;
 }

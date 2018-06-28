@@ -43,10 +43,15 @@
             }
 
             while($row = $result->fetch_assoc()) {
-                if ($hash == $row["pass"]) {
-                    // SUCCESS
-                    $type = 1;
-                    $data = "Welcome, " . $user . "<br>";
+                if ($hash == $row["token"]) {
+                    $time = time();
+                    if ($time <= $row["timestamp"]) {
+                        // SUCCESS
+                        $type = 1;
+                        $data = "Welcome, " . $user . "<br>";
+                    } else {
+                        throw new Exception("Cookie error, the session is expired!");
+                    }
                 } else {
                     throw new Exception("Cookie error, password not match!");
                 }

@@ -56,6 +56,16 @@ function updateCookie() {
     var cookieHash = getCookie("polixbus_hash");
 
     if (cookieUser !== "" && cookieHash !== "") {
+
+        $.post('updateTimestamp.php', { field1: cookieUser, field2 : cookieHash},
+            function(returnedData){
+                if(!JSON.parse(returnedData).t === 1) {
+                    logout();
+                    showReservation();
+                    alert(JSON.parse(returnedData).d);
+                }
+            });
+
         var TIMEOUT = 2;
         var d = new Date();
 
@@ -79,9 +89,9 @@ function verifyCookie(user, hash) {
                 showLogged();
                 showReservation();
             } else {
+                alert(JSON.parse(returnedData).d);
                 logout();
                 showReservation();
-                alert(JSON.parse(returnedData).d);
             }
         });
 }
