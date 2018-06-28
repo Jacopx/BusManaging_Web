@@ -91,7 +91,6 @@ function verifyCookie(user, hash) {
 function signup() {
     var rU = validateUser();
     var rP = validatePass();
-    rU = 1; rP = 1;
 
     if(rU === 1 && rP === 1) {
 
@@ -109,6 +108,11 @@ function signup() {
                     location.reload();
                 }
             });
+    } else {
+        document.getElementById("signup_pass").value = "";
+        document.getElementById("signup_user").value = "";
+        document.getElementById("signup_pass-repeat").value = "";
+        alert("Password and/or mail not correct!");
     }
 }
 
