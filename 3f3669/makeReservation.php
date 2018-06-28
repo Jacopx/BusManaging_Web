@@ -11,10 +11,13 @@
     }
 
     if(isset($_POST['field1']) && isset($_POST['field2']) && isset($_POST['field3']) && isset($_POST['field4']) && $secure_connection) {
-        if ($_POST['field2'] < $_POST['field3']) {
+        $start = strtolower($_POST['field2']);
+        $end = strtolower($_POST['field3']);
+
+        if ($start < $end) {
             if ($_POST['field4'] > 0) {
                 if(ctype_alnum($_POST['field2']) && ctype_alnum($_POST['field3'])) {
-                    makeReservation($_POST['field1'], $_POST['field2'], $_POST['field3'], $_POST['field4']);
+                    makeReservation($_POST['field1'], $start, $end, $_POST['field4']);
                 }
             }
         }
@@ -88,8 +91,6 @@
 
         $stops = array();
         $attempt = 1;
-
-
 
         retry:
         try {

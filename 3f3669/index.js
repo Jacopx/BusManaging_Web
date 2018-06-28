@@ -205,8 +205,8 @@ function makeReservation() {
     document.getElementById("reservation-table").style.visibility = 'visible';
 
     var userLogged = getCookie("polixbus_user");
-    var start = document.getElementById("start").value;
-    var end = document.getElementById("end").value;
+    var start = document.getElementById("start").value.toLowerCase();
+    var end = document.getElementById("end").value.toLowerCase();
     var num = document.getElementById("number").value;
 
     const regexAlNum = /^[a-z0-9]+$/i;
