@@ -27,9 +27,13 @@
             die();
         }
 
+        // Start transaction
+        $mysqli->autocommit(FALSE);
+        $mysqli->begin_transaction();
+
         try {
             // Get user informations
-            $stmt = $mysqli->prepare("SELECT * FROM Users WHERE user=?");
+            $stmt = $mysqli->prepare("SELECT * FROM Users WHERE user=? FOR UPDATE");
             $user_escape  = $mysqli->real_escape_string($user);
             $stmt->bind_param("s", $user_escape);
             $stmt->execute();
@@ -67,6 +71,8 @@
                     $cookie_name = 'polixbus_hash';
                     $cookie_value = $hash;
                     setcookie($cookie_name, $cookie_value, time() + (TIMEOUT*60), '/');
+
+                    $mysqli->commit();
 
                     break;
 

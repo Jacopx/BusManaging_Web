@@ -29,12 +29,15 @@
 
         try {
             $time = time() + TIMEOUT * 60;
-            $stmt = $mysqli->prepare("UPDATE Users SET timestamp = ?  WHERE user = ?, token = ?");
-            $stmt->bind_param("iss", $time, $user_escape, $hash);
+            $stmt = $mysqli->prepare("UPDATE Users SET timestamp = ?  WHERE user = ? AND token = ?");
+            $stmt->bind_param("iss", $time, $user, $hash);
             $stmt->execute();
 
             if($stmt->affected_rows === 0) {
                 throw new Exception("Cookie update not performed!");
+            } else {
+                $type = 1;
+                $data = "Updated";
             }
 
         } catch (Exception $e) {
@@ -43,7 +46,6 @@
             $mysqli->rollback();
             goto end;
         }
-
 
         end:
         $mysqli->close();

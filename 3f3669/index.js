@@ -13,6 +13,7 @@ function checkCookie() {
 
     if (cookieUser !== "" && cookieHash !== "") {
         verifyCookie(cookieUser, cookieHash);
+        updateCookie();
     } else {
         showLogin();
     }
@@ -59,7 +60,8 @@ function updateCookie() {
 
         $.post('updateTimestamp.php', { field1: cookieUser, field2 : cookieHash},
             function(returnedData){
-                if(!JSON.parse(returnedData).t === 1) {
+                console.log(returnedData);
+                if(JSON.parse(returnedData).t === 0) {
                     logout();
                     showReservation();
                     alert(JSON.parse(returnedData).d);
@@ -74,6 +76,7 @@ function updateCookie() {
 
         document.cookie = "polixbus_user=" + cookieUser + ";" + expires + ";path=/";
         document.cookie = "polixbus_hash=" + cookieHash + ";" + expires + ";path=/";
+
     } else {
         showLogin();
     }
@@ -251,7 +254,6 @@ function makeReservation() {
 // Show reservations, different layout in case of logged or not
 function showReservation() {
 
-    updateCookie();
     document.getElementById("reservation-table").style.visibility = 'visible';
 
     var userLogged = getCookie("polixbus_user");
