@@ -13,7 +13,6 @@ function checkCookie() {
 
     if (cookieUser !== "" && cookieHash !== "") {
         verifyCookie(cookieUser, cookieHash);
-        updateCookie();
     } else {
         showLogin();
     }

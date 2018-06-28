@@ -55,10 +55,8 @@
             $hash = password_hash($pass, PASSWORD_DEFAULT);
 
             // Insert the new user
-            $stmt = $mysqli->prepare("INSERT INTO Users VALUES (?,?)");
-            $user_escape  = $mysqli->real_escape_string($user);
-            $hash_escape = $mysqli->real_escape_string($hash);
-            $stmt->bind_param("ss", $user_escape, $hash_escape);
+            $stmt = $mysqli->prepare("INSERT INTO Users (user, pass) VALUES (?,?)");
+            $stmt->bind_param("ss", $user_escape, $hash);
             $stmt->execute();
 
             if ($stmt->affected_rows === 0) {
