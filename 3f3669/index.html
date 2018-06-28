@@ -17,7 +17,6 @@
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
     <!--<script>!window.jQuery && document.write('<script src="jquery-3.3.1.min.js"><\/script>')</script>-->
 </head>
-
 <body onload="checkCookie(); showReservation();">
 
   <div class="header">
@@ -55,6 +54,11 @@
   </div>
 
   <div class="main" id="main">
+      <noscript>
+          <h1>ERROR</h1>
+          For some reasons is not possible to use the websites. Cookies must be enabled and JS must be active to properly run the page.
+          <h3>Sorry!</h3>
+      </noscript>
       <div class="reservation-div">
           <div class="reservation-table" id="reservation-table">
 
@@ -96,12 +100,6 @@
           </div>
       </div>
   </div>
-
-  <noscript>
-      <h1>ERROR</h1>
-      For some reasons is not possible to use the websites. Cookies must be enabled and JS must be active to properly run the page.
-      <h3>Sorry!</h3>
-  </noscript>
 </body>
 
 </html>
