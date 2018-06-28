@@ -193,21 +193,28 @@ function makeReservation() {
     var end = document.getElementById("end").value;
     var num = document.getElementById("number").value;
 
+    const regexAlNum = /^[a-z0-9]+$/i;
+
     // Verify that all field are not empty
     if (userLogged !== "" && start !== "" && end !== "" && num !== "") {
         if (start < end) {
             if (num > 0) {
-                $.post('makeReservation.php', { field1: userLogged, field2: start, field3: end, field4: num},
-                    function(returnedData){
-                        console.log(returnedData);
+                if (regexAlNum.test(start) && regexAlNum.test(end)) {
+                    $.post('makeReservation.php', { field1: userLogged, field2: start, field3: end, field4: num},
+                        function(returnedData){
+                            console.log(returnedData);
 
-                        if (JSON.parse(returnedData).t === 1) {
-                            showReservation();
-                        } else {
-                            alert(JSON.parse(returnedData).d);
-                        }
+                            if (JSON.parse(returnedData).t === 1) {
+                                showReservation();
+                            } else {
+                                alert(JSON.parse(returnedData).d);
+                            }
 
-                    });
+                        });
+                } else {
+                    showReservation();
+                    alert("Only letters or number are usable in start and stop!");
+                }
             } else {
                 showReservation();
                 alert("Number of passengers must be greater or equal to 1!");
