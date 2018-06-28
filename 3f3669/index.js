@@ -205,17 +205,22 @@ function makeReservation() {
         if (start < end) {
             if (num > 0) {
                 if (regexAlNum.test(start) && regexAlNum.test(end)) {
-                    $.post('makeReservation.php', { field1: userLogged, field2: start, field3: end, field4: num},
-                        function(returnedData){
-                            console.log(returnedData);
+                    if (start.length < 254 || end.length < 254) {
+                        $.post('makeReservation.php', { field1: userLogged, field2: start, field3: end, field4: num},
+                            function(returnedData){
+                                console.log(returnedData);
 
-                            if (JSON.parse(returnedData).t === 1) {
-                                showReservation();
-                            } else {
-                                alert(JSON.parse(returnedData).d);
-                            }
+                                if (JSON.parse(returnedData).t === 1) {
+                                    showReservation();
+                                } else {
+                                    alert(JSON.parse(returnedData).d);
+                                }
 
-                        });
+                            });
+                    } else {
+                        showReservation();
+                        alert("Stop and/or start is longer than 254 chars!");
+                    }
                 } else {
                     showReservation();
                     alert("Only letters or number are usable in start and stop!");
