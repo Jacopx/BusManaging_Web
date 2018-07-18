@@ -1,5 +1,5 @@
 # BusManaging_WebPlatform
-Simple protocol developed for the course Distributed Programming I of the first year of Master in Computer Engineering of Politecnico di Torino.
+Simple web service for the course Distributed Programming I of the first year of Master in Computer Engineering of Politecnico di Torino.
 
 ### Request
 Build a simplified version of a website for managing online booking of a shared shuttle for people transportation. For simplicity, assume there is a single shuttle with a fixed capacity (but the capacity should be configurable in the code by means of a define or variable) and do not consider the time of transportation, which is considered fixed as well.
@@ -60,6 +60,9 @@ EE → FF: total 0: empty FF → KK: total 4: user u1 (4 passengers)
 
 ### Authors
 * **Jacopo Nasi** - [Jacopx](https://github.com/Jacopx)
+
+### Ending notes
+This website has allow me to get the maximum score for the project, and ,with the other part [FTP](https://github.com/Jacopx/FileTransferProtocol), the maximum score for the exam, 30/30. Thanks!
 
 ### License
 The property of this project belongs to the Polytechnic of Turin since this project isn't delivered yet. After that it will be published under not-already defined license.
